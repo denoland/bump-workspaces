@@ -1,0 +1,12 @@
+{
+  "lock": false,
+  "name": "@deno/bump_workspace",
+  "version": "0.0.0",
+  "tasks": {
+    "test": "deno test -A",
+    "cov": "deno test -A --coverage && deno coverage --html && deno coverage --lcov --output=coverage/lcov.info"
+  },
+  "imports": {
+    "std/": "https://deno.land/std@0.213.0/"
+  }
+}
