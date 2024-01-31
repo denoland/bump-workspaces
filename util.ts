@@ -14,6 +14,7 @@ export type VersionUpdate = "major" | "minor" | "patch";
 export type Commit = {
   subject: string;
   body: string;
+  hash: string;
 };
 
 export type CommitWithTag = Commit & { tag: string };
@@ -324,33 +325,28 @@ export function createReleaseNote(
 
 export function createPrBody(
   updates: VersionUpdateResult[],
-  diagnostic: Diagnostic[],
+  diagnostics: Diagnostic[],
+  githubRepo: string,
 ) {
   const table = updates.map((u) =>
     "|" + [u.summary.module, u.from, u.to, u.diff].join("|") + "|"
   ).join("\n");
-  const unknownCommits = diagnostic.filter((d) => d.type === "unknown_commit");
-  const unknownRanges = diagnostic.filter((d) =>
-    d.type === "unknown_range_commit"
-  );
-  const missingRanges = diagnostic.filter((d) => d.type === "missing_range");
-  const ignoredCommits = diagnostic.filter((d) => d.type === "skipped_commit");
 
   const unknownCommitsNotes = createDiagnosticsNotes(
     "The following commits are not recognized. Please handle them manually if necessary:",
-    unknownCommits,
+    "unknown_commit",
   );
   const unknownRangesNotes = createDiagnosticsNotes(
     "The following commits have unknown scopes. Please handle them manually if necessary:",
-    unknownRanges,
+    "unknown_range_commit",
   );
   const missingRangesNotes = createDiagnosticsNotes(
     "Required scopes are missing in the following commits. Please handle them manually if necessary:",
-    missingRanges,
+    "missing_range",
   );
   const ignoredCommitsNotes = createDiagnosticsNotes(
     "The following commits are ignored:",
-    ignoredCommits,
+    "skipped_commit",
   );
   return `The following updates are detected:
 
@@ -378,14 +374,19 @@ To make edits to this PR:
 git fetch upstream release_0_213.0 && git checkout -b release_0_213.0 upstream/release_0_213.0
 \`\`\`
 `;
-}
-
-function createDiagnosticsNotes(note: string, diagnostics: Diagnostic[]) {
-  if (diagnostics.length === 0) {
-    return "";
+  function createDiagnosticsNotes(
+    note: string,
+    type: string,
+  ) {
+    const diagnostics_ = diagnostics.filter((d) => d.type === type);
+    if (diagnostics_.length === 0) {
+      return "";
+    }
+    return `${note}\n\n` +
+      diagnostics_.map((d) =>
+        `- [${d.commit.subject}](/${githubRepo}/commit/${d.commit.hash})`
+      ).join("\n");
   }
-  return `${note}\n\n` +
-    diagnostics.map((d) => `- [${d.commit.subject}]()`).join("\n");
 }
 
 export function createReleaseBranchName(date: Date) {

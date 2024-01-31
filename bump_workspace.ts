@@ -64,13 +64,17 @@ export async function bumpWorkspace(
   const newBranchName = createReleaseBranchName(now);
   baseBranchName ??= await $`git branch --show-current`.text();
   const text =
-    await $`git --no-pager log --pretty=format:${separator}%B ${start}..${baseBranchName}`
+    await $`git --no-pager log --pretty=format:${separator}%H%B ${start}..${baseBranchName}`
       .text();
   const commits = text.split(separator).map((commit) => {
+    const hash = commit.slice(0, 40);
+    console.log("hash", hash);
+    commit = commit.slice(40);
+    //console.log(commit);
     const i = commit.indexOf("\n");
     const subject = commit.slice(0, i).trim();
     const body = commit.slice(i + 1).trim();
-    return { subject, body };
+    return { hash, subject, body };
   });
   commits.shift();
   console.log(
@@ -139,7 +143,7 @@ export async function bumpWorkspace(
   }
 
   const releaseNote = createReleaseNote(Object.values(updates), modules, now);
-  const prBody = createPrBody(Object.values(updates), diagnostics);
+  const prBody = createPrBody(Object.values(updates), diagnostics, githubRepo!);
 
   if (dryRun) {
     console.log("Skip making a commit.");
@@ -183,7 +187,7 @@ export async function bumpWorkspace(
       head: newBranchName,
       draft: true,
       title: `Release ${createReleaseTitle(now)}`,
-      body: createPrBody(Object.values(updates), diagnostics),
+      body: createPrBody(Object.values(updates), diagnostics, githubRepo),
     });
     console.log("New pull request:", cyan(openedPr.data.html_url));
   }
