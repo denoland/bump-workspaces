@@ -7,15 +7,5 @@ if (import.meta.main) {
   const args = parseArgs(Deno.args, {
     boolean: ["dry-run"],
   });
-  const githubToken = Deno.env.get("GITHUB_TOKEN");
-  if (githubToken === undefined) {
-    console.error("GITHUB_TOKEN is not set.");
-    Deno.exit(1);
-  }
-  const githubRepo = Deno.env.get("GITHUB_REPOSITORY");
-  if (githubRepo === undefined) {
-    console.error("GITHUB_REPOSITORY is not set.");
-    Deno.exit(1);
-  }
-  await bumpWorkspaces({ githubToken, githubRepo, dryRun: args["dry-run"] });
+  await bumpWorkspaces({ dryRun: args["dry-run"] });
 }

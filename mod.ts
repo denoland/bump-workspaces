@@ -190,7 +190,13 @@ export async function bumpWorkspaces(
 
       // Makes a PR
       console.log(`Creating a pull request.`);
+      githubToken ??= Deno.env.get("GITHUB_TOKEN");
+      if (githubToken === undefined) {
+        console.error("GITHUB_TOKEN is not set.");
+        Deno.exit(1);
+      }
       const octoKit = new Octokit({ auth: githubToken });
+      githubRepo ??= Deno.env.get("GITHUB_REPOSITORY");
       if (githubRepo === undefined) {
         console.error("GITHUB_REPOSITORY is not set.");
         Deno.exit(1);

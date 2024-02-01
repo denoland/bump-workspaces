@@ -9,12 +9,36 @@ This tool automatically detects necessary version updates for the workspaces and
 creates a PR with necessary changes.
 
 ```sh
-deno run -A https://deno.land/x/bump_workspaces@v0.1.2/cli.ts
+deno run -A https://deno.land/x/bump_workspaces@v0.1.2/cli.ts --dry-run
 ```
 
-TODO(kt3k): Example of github actions yaml
+```yaml
+name: version_bump
 
-TODO(kt3k): link to example PR
+on: workflow_dispatch
+
+jobs:
+  build:
+    name: version bump
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Set up Deno
+        uses: denoland/setup-deno@v1
+
+      - name: Run workspaces version bump
+        run: |
+          git fetch --unshallow origin
+          deno run -A https://deno.land/x/bump_workspaces@v0.1.2/cli.ts
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+```
+
+Example pull request: https://github.com/kt3k/deno_std/pull/34
 
 ## Commit titles
 
