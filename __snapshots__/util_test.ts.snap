@@ -1,0 +1,370 @@
+export const snapshot = {};
+
+snapshot[`summarizeVersionBumpsByModule() 1`] = `
+[
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "feat(tools,log,http,semver): check mod exports, export items consistently from mod.ts  (#4229)",
+        tag: "feat",
+      },
+    ],
+    module: "tools",
+    version: "minor",
+  },
+  {
+    commits: [
+      {
+        body: "* BREAKING(log): remove \`handlers.ts\`
+
+* fix
+
+* BREAKING(log): remove string formatter",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "BREAKING(log): remove string formatter (#4239)",
+        tag: "BREAKING",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "BREAKING(log): single-export handler files (#4236)",
+        tag: "BREAKING",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "feat(tools,log,http,semver): check mod exports, export items consistently from mod.ts  (#4229)",
+        tag: "feat",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "feat(log): make handlers disposable (#4195)",
+        tag: "feat",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "fix(log): make \`flattenArgs()\` private (#4214)",
+        tag: "fix",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "refactor(log): tidy imports and exports (#4215)",
+        tag: "refactor",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "refactor(log): replace deprecated imports (#4188)",
+        tag: "refactor",
+      },
+    ],
+    module: "log",
+    version: "major",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "BREAKING(http): remove \`CookieMap\` (#4179)",
+        tag: "BREAKING",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "feat(tools,log,http,semver): check mod exports, export items consistently from mod.ts  (#4229)",
+        tag: "feat",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "docs(http): complete documentation (#4209)",
+        tag: "docs",
+      },
+    ],
+    module: "http",
+    version: "major",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "BREAKING(semver): remove \`FormatStyle\` (#4182)",
+        tag: "BREAKING",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "BREAKING(semver): remove \`compareBuild()\` (#4181)",
+        tag: "BREAKING",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "BREAKING(semver): remove \`rsort()\` (#4180)",
+        tag: "BREAKING",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "feat(tools,log,http,semver): check mod exports, export items consistently from mod.ts  (#4229)",
+        tag: "feat",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "deprecation(semver): rename \`eq()\`, \`neq()\`, \`lt()\`, \`lte()\`, \`gt()\` and \`gte()\` (#4083)",
+        tag: "deprecation",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "deprecation(semver): deprecate \`SemVerRange\`, introduce \`Range\` (#4161)",
+        tag: "deprecation",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "deprecation(semver): deprecate \`outside()\` (#4185)",
+        tag: "deprecation",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "refactor(semver): replace \`parseComparator()\` with comparator objects (#4204)",
+        tag: "refactor",
+      },
+    ],
+    module: "semver",
+    version: "major",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "BREAKING(streams): remove \`readAll()\`, \`writeAll()\` and \`copy()\` (#4238)",
+        tag: "BREAKING",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "docs(streams): remove \`Deno.metrics()\` use in example (#4217)",
+        tag: "docs",
+      },
+    ],
+    module: "streams",
+    version: "major",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "BREAKING(io): remove \`types.d.ts\` (#4237)",
+        tag: "BREAKING",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "feat(io): un-deprecate \`Buffer\` (#4184)",
+        tag: "feat",
+      },
+    ],
+    module: "io",
+    version: "major",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "refactor(webgpu): use internal \`Deno.close()\` for cleanup of WebGPU resources (#4231)",
+        tag: "refactor",
+      },
+    ],
+    module: "webgpu",
+    version: "patch",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "feat(collections): pass \`key\` to \`mapValues()\` transformer (#4127)",
+        tag: "feat",
+      },
+    ],
+    module: "collections",
+    version: "minor",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "fix(toml): \`parse()\` duplicates the character next to reserved escape sequences (#4192)",
+        tag: "fix",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "docs(toml): complete documentation (#4223)",
+        tag: "docs",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "test(toml): improve test coverage (#4211)",
+        tag: "test",
+      },
+    ],
+    module: "toml",
+    version: "patch",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "deprecation(path): split off all constants into their own files and deprecate old names (#4153)",
+        tag: "deprecation",
+      },
+    ],
+    module: "path",
+    version: "patch",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "docs(msgpack): complete documentation (#4220)",
+        tag: "docs",
+      },
+    ],
+    module: "msgpack",
+    version: "patch",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "docs(media_types): complete documentation (#4219)",
+        tag: "docs",
+      },
+    ],
+    module: "media_types",
+    version: "patch",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "refactor(console): rename \`_rle\` to \`_run_length.ts\` (#4212)",
+        tag: "refactor",
+      },
+    ],
+    module: "console",
+    version: "patch",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "fix(fmt): correct \`stripColor()\` deprecation notice (#4208)",
+        tag: "fix",
+      },
+    ],
+    module: "fmt",
+    version: "patch",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "fix(flags): correct deprecation notices (#4207)",
+        tag: "fix",
+      },
+    ],
+    module: "flags",
+    version: "patch",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "fix(expect): fix the function signature of \`toMatchObject()\` (#4202)",
+        tag: "fix",
+      },
+    ],
+    module: "expect",
+    version: "patch",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "chore(crypto): upgrade to \`rust@1.75.0\` and \`wasmbuild@0.15.5\` (#4193)",
+        tag: "chore",
+      },
+    ],
+    module: "crypto",
+    version: "patch",
+  },
+  {
+    commits: [
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
+        subject: "refactor(using): use \`using\` keyword for Explicit Resource Management (#4143)",
+        tag: "refactor",
+      },
+    ],
+    module: "using",
+    version: "patch",
+  },
+]
+`;
+
+snapshot[`getWorkspaceModules() 1`] = `
+[
+  {
+    [Symbol(path)]: "testdata/foo/deno.json",
+    name: "@scope/foo",
+    version: "1.2.3",
+  },
+  {
+    [Symbol(path)]: "testdata/bar/deno.json",
+    name: "@scope/bar",
+    version: "2.3.4",
+  },
+  {
+    [Symbol(path)]: "testdata/baz/deno.json",
+    name: "@scope/baz",
+    version: "0.2.3",
+  },
+  {
+    [Symbol(path)]: "testdata/qux/deno.json",
+    name: "@scope/qux",
+    version: "0.3.4",
+  },
+  {
+    [Symbol(path)]: "testdata/quux/deno.json",
+    name: "@scope/quux",
+    version: "0.0.0",
+  },
+]
+`;

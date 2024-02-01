@@ -1,6 +1,7 @@
 // Copyright 2024 the Deno authors. All rights reserved. MIT license.
 
 import { assertEquals } from "std/assert/mod.ts";
+import { assertSnapshot } from "std/testing/snapshot.ts";
 import denoJson from "./deno.json" with { type: "json" };
 import {
   applyVersionBump,
@@ -8,6 +9,7 @@ import {
   createReleaseBranchName,
   createReleaseTitle,
   defaultParseCommitMessage,
+  getWorkspaceModules,
   maxVersion,
   pathProp,
   summarizeVersionBumpsByModule,
@@ -290,10 +292,10 @@ const exampleVersionBumps = [
     version: "major",
     commit: {
       subject: "BREAKING(log): remove string formatter (#4239)",
-      body: "* BREAKING(log): remove `handlers.ts`\r\n" +
-        "\r\n" +
-        "* fix\r\n" +
-        "\r\n" +
+      body: "* BREAKING(log): remove `handlers.ts`\n" +
+        "\n" +
+        "* fix\n" +
+        "\n" +
         "* BREAKING(log): remove string formatter",
       hash,
     },
@@ -631,358 +633,8 @@ const exampleVersionBumps = [
   },
 ] as VersionBump[];
 
-Deno.test("summarizeVersionBumpsByModule()", () => {
-  assertEquals(summarizeVersionBumpsByModule(exampleVersionBumps), [
-    {
-      module: "tools",
-      version: "minor",
-      commits: [
-        {
-          subject:
-            "feat(tools,log,http,semver): check mod exports, export items consistently from mod.ts  (#4229)",
-          body: "",
-          tag: "feat",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "log",
-      version: "major",
-      commits: [
-        {
-          subject: "BREAKING(log): remove string formatter (#4239)",
-          body:
-            "* BREAKING(log): remove `handlers.ts`\r\n\r\n* fix\r\n\r\n* BREAKING(log): remove string formatter",
-          tag: "BREAKING",
-          hash,
-        },
-        {
-          subject: "BREAKING(log): single-export handler files (#4236)",
-          body: "",
-          tag: "BREAKING",
-          hash,
-        },
-        {
-          subject:
-            "feat(tools,log,http,semver): check mod exports, export items consistently from mod.ts  (#4229)",
-          body: "",
-          tag: "feat",
-          hash,
-        },
-        {
-          subject: "feat(log): make handlers disposable (#4195)",
-          body: "",
-          tag: "feat",
-          hash,
-        },
-        {
-          subject: "fix(log): make `flattenArgs()` private (#4214)",
-          body: "",
-          tag: "fix",
-          hash,
-        },
-        {
-          subject: "refactor(log): tidy imports and exports (#4215)",
-          body: "",
-          tag: "refactor",
-          hash,
-        },
-        {
-          subject: "refactor(log): replace deprecated imports (#4188)",
-          body: "",
-          tag: "refactor",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "http",
-      version: "major",
-      commits: [
-        {
-          subject: "BREAKING(http): remove `CookieMap` (#4179)",
-          body: "",
-          tag: "BREAKING",
-          hash,
-        },
-        {
-          subject:
-            "feat(tools,log,http,semver): check mod exports, export items consistently from mod.ts  (#4229)",
-          body: "",
-          tag: "feat",
-          hash,
-        },
-        {
-          subject: "docs(http): complete documentation (#4209)",
-          body: "",
-          tag: "docs",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "semver",
-      version: "major",
-      commits: [
-        {
-          subject: "BREAKING(semver): remove `FormatStyle` (#4182)",
-          body: "",
-          tag: "BREAKING",
-          hash,
-        },
-        {
-          subject: "BREAKING(semver): remove `compareBuild()` (#4181)",
-          body: "",
-          tag: "BREAKING",
-          hash,
-        },
-        {
-          subject: "BREAKING(semver): remove `rsort()` (#4180)",
-          body: "",
-          tag: "BREAKING",
-          hash,
-        },
-        {
-          subject:
-            "feat(tools,log,http,semver): check mod exports, export items consistently from mod.ts  (#4229)",
-          body: "",
-          tag: "feat",
-          hash,
-        },
-        {
-          subject:
-            "deprecation(semver): rename `eq()`, `neq()`, `lt()`, `lte()`, `gt()` and `gte()` (#4083)",
-          body: "",
-          tag: "deprecation",
-          hash,
-        },
-        {
-          subject:
-            "deprecation(semver): deprecate `SemVerRange`, introduce `Range` (#4161)",
-          body: "",
-          tag: "deprecation",
-          hash,
-        },
-        {
-          subject: "deprecation(semver): deprecate `outside()` (#4185)",
-          body: "",
-          tag: "deprecation",
-          hash,
-        },
-        {
-          subject:
-            "refactor(semver): replace `parseComparator()` with comparator objects (#4204)",
-          body: "",
-          tag: "refactor",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "streams",
-      version: "major",
-      commits: [
-        {
-          subject:
-            "BREAKING(streams): remove `readAll()`, `writeAll()` and `copy()` (#4238)",
-          body: "",
-          tag: "BREAKING",
-          hash,
-        },
-        {
-          subject:
-            "docs(streams): remove `Deno.metrics()` use in example (#4217)",
-          body: "",
-          tag: "docs",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "io",
-      version: "major",
-      commits: [
-        {
-          subject: "BREAKING(io): remove `types.d.ts` (#4237)",
-          body: "",
-          tag: "BREAKING",
-          hash,
-        },
-        {
-          subject: "feat(io): un-deprecate `Buffer` (#4184)",
-          body: "",
-          tag: "feat",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "webgpu",
-      version: "patch",
-      commits: [
-        {
-          subject:
-            "refactor(webgpu): use internal `Deno.close()` for cleanup of WebGPU resources (#4231)",
-          body: "",
-          tag: "refactor",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "collections",
-      version: "minor",
-      commits: [
-        {
-          subject:
-            "feat(collections): pass `key` to `mapValues()` transformer (#4127)",
-          body: "",
-          tag: "feat",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "toml",
-      version: "patch",
-      commits: [
-        {
-          subject:
-            "fix(toml): `parse()` duplicates the character next to reserved escape sequences (#4192)",
-          body: "",
-          tag: "fix",
-          hash,
-        },
-        {
-          subject: "docs(toml): complete documentation (#4223)",
-          body: "",
-          tag: "docs",
-          hash,
-        },
-        {
-          subject: "test(toml): improve test coverage (#4211)",
-          body: "",
-          tag: "test",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "path",
-      version: "patch",
-      commits: [
-        {
-          subject:
-            "deprecation(path): split off all constants into their own files and deprecate old names (#4153)",
-          body: "",
-          tag: "deprecation",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "msgpack",
-      version: "patch",
-      commits: [
-        {
-          subject: "docs(msgpack): complete documentation (#4220)",
-          body: "",
-          tag: "docs",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "media_types",
-      version: "patch",
-      commits: [
-        {
-          subject: "docs(media_types): complete documentation (#4219)",
-          body: "",
-          tag: "docs",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "console",
-      version: "patch",
-      commits: [
-        {
-          subject:
-            "refactor(console): rename `_rle` to `_run_length.ts` (#4212)",
-          body: "",
-          tag: "refactor",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "fmt",
-      version: "patch",
-      commits: [
-        {
-          subject:
-            "fix(fmt): correct `stripColor()` deprecation notice (#4208)",
-          body: "",
-          tag: "fix",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "flags",
-      version: "patch",
-      commits: [
-        {
-          subject: "fix(flags): correct deprecation notices (#4207)",
-          body: "",
-          tag: "fix",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "expect",
-      version: "patch",
-      commits: [
-        {
-          subject:
-            "fix(expect): fix the function signature of `toMatchObject()` (#4202)",
-          body: "",
-          tag: "fix",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "crypto",
-      version: "patch",
-      commits: [
-        {
-          subject:
-            "chore(crypto): upgrade to `rust@1.75.0` and `wasmbuild@0.15.5` (#4193)",
-          body: "",
-          tag: "chore",
-          hash,
-        },
-      ],
-    },
-    {
-      module: "using",
-      version: "patch",
-      commits: [
-        {
-          subject:
-            "refactor(using): use `using` keyword for Explicit Resource Management (#4143)",
-          body: "",
-          tag: "refactor",
-          hash,
-        },
-      ],
-    },
-  ]);
+Deno.test("summarizeVersionBumpsByModule()", async (t) => {
+  await assertSnapshot(t, summarizeVersionBumpsByModule(exampleVersionBumps));
 });
 
 Deno.test("maxVersion() returns the bigger version update from the given 2", () => {
@@ -995,13 +647,22 @@ Deno.test("maxVersion() returns the bigger version update from the given 2", () 
   assertEquals(maxVersion("patch", "patch"), "patch");
 });
 
-Deno.test("tryGetDenoCongif()", async () => {
-  const [_path, config] = await tryGetDenoConfig();
+Deno.test("tryGetDenoConfig()", async () => {
+  const [_path, config] = await tryGetDenoConfig(".");
   assertEquals(config.name, denoJson.name);
 });
 
-Deno.test("getWorkspaceModules()", () => {
-  // TODO(kt3k): set up fixture and write test.
+Deno.test("getWorkspaceModules()", async (t) => {
+  const modules = await getWorkspaceModules("testdata");
+  assertEquals(modules.length, 5);
+  assertEquals(modules.map((m) => m.name), [
+    "@scope/foo",
+    "@scope/bar",
+    "@scope/baz",
+    "@scope/qux",
+    "@scope/quux",
+  ]);
+  await assertSnapshot(t, modules);
 });
 
 Deno.test("applyVersionBump() updates the version of the given module", async () => {

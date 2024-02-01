@@ -1,12 +1,11 @@
-# bump_workspace
+# bump_workspaces
 
-> A tool for releasing a workspace project.
+> A tool for releasing workspaces in Deno.
 
-This tool automatically detects necessary version updates for the modules in a
-workspace and creates a PR with necessary changes.
+This tool automatically detects necessary version updates for the workspaces and creates a PR with necessary changes.
 
 ```
-deno run --allow-read=. --allow-write=. jsr:@deno/bump_workspace
+deno run --allow-read=. --allow-write=. jsr:@deno/bump_workspaces
 ```
 
 TODO(kt3k): link to example PR
@@ -17,7 +16,7 @@ This tool uses the commit titles as the input for detecting which modules and
 versions to update. The commit titles need to follow the following format:
 
 ```
-<tag>(<modules,...>): <commit message>
+<tag>(<scopes,...>): <commit message>
 ```
 
 Some examples are:

@@ -190,7 +190,7 @@ export function maxVersion(
 }
 
 export async function tryGetDenoConfig(
-  path = ".",
+  path: string,
   // deno-lint-ignore no-explicit-any
 ): Promise<[path: string, config: any]> {
   let denoJson: string | undefined;
@@ -226,8 +226,10 @@ export async function tryGetDenoConfig(
   }
 }
 
-export async function getWorkspaceModules(): Promise<WorkspaceModule[]> {
-  const [_, denoConfig] = await tryGetDenoConfig();
+export async function getWorkspaceModules(
+  root = ".",
+): Promise<WorkspaceModule[]> {
+  const [_, denoConfig] = await tryGetDenoConfig(root);
   const workspaces = denoConfig.workspaces;
 
   if (!Array.isArray(workspaces)) {
@@ -241,9 +243,11 @@ export async function getWorkspaceModules(): Promise<WorkspaceModule[]> {
       console.log("deno.json workspaces field should be an array of strings.");
       Deno.exit(1);
     }
-    const [path, workspaceConfig] = await tryGetDenoConfig(workspace);
+    const [path, workspaceConfig] = await tryGetDenoConfig(
+      join(root, workspace),
+    );
     if (!workspaceConfig.name) {
-      console.log(`${join(workspace, "deno.json")} doesn't have name field.`);
+      console.log(`${path} doesn't have name field.`);
       Deno.exit(1);
     }
     result.push({ ...workspaceConfig, [pathProp]: path });
