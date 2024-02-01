@@ -183,7 +183,7 @@ export async function bumpWorkspaces(
       );
       await $`git checkout -b ${newBranchName}`;
       await $`git add .`;
-      await $`git commit --author="${gitUserName} <${gitUserEmail}>" -m "chore: update versions"`;
+      await $`git -c "user.name=${gitUserName}" -c "user.email=${gitUserEmail}" commit -m "chore: update versions"`;
 
       console.log(`Pushing the new branch ${magenta(newBranchName)}.`);
       await $`git push origin ${newBranchName}`;
