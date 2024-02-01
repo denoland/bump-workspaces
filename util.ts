@@ -1,13 +1,13 @@
 // Copyright 2024 the Deno authors. All rights reserved. MIT license.
 
-import { parse as parseJsonc } from "std/jsonc/parse.ts";
-import { join } from "std/path/join.ts";
-import { resolve } from "std/path/resolve.ts";
+import { parse as parseJsonc } from "https://deno.land/std@0.214.0/jsonc/parse.ts";
+import { join } from "https://deno.land/std@0.214.0/path/join.ts";
+import { resolve } from "https://deno.land/std@0.214.0/path/resolve.ts";
 import {
   format as formatSemver,
   increment,
   parse as parseSemVer,
-} from "std/semver/mod.ts";
+} from "https://deno.land/std@0.214.0/semver/mod.ts";
 
 export type VersionUpdate = "major" | "minor" | "patch";
 

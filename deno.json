@@ -8,6 +8,6 @@
     "cov-open": "deno task cov && open coverage/html/index.html"
   },
   "imports": {
-    "std/": "https://deno.land/std@0.213.0/"
+    "std/": "https://deno.land/std@0.214.0/"
   }
 }

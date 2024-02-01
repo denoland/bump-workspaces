@@ -2,7 +2,7 @@
 
 import { assertSnapshot } from "std/testing/snapshot.ts";
 import { copy, exists } from "std/fs/mod.ts";
-import { bumpWorkspaces } from "./bump_workspaces.ts";
+import { bumpWorkspaces } from "./mod.ts";
 import { join } from "std/path/mod.ts";
 import { assertEquals } from "std/assert/assert_equals.ts";
 import { tryGetDenoConfig } from "./util.ts";
@@ -15,7 +15,7 @@ Deno.test("bumpWorkspaces()", async (t) => {
     dryRun: "git",
     githubRepo: "denoland/deno_std",
     githubToken: "1234567890",
-    baseBranchName: "origin/base-branch-for-testing",
+    base: "origin/base-branch-for-testing",
     start: "start-tag-for-testing",
     root: dir,
   });
@@ -79,7 +79,7 @@ Deno.test(
       dryRun: true,
       githubRepo: "denoland/deno_std",
       githubToken: "1234567890",
-      baseBranchName: "origin/base-branch-for-testing",
+      base: "origin/base-branch-for-testing",
       start: "start-tag-for-testing",
       root: dir,
     });

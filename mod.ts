@@ -2,9 +2,9 @@
 
 import { $ } from "https://deno.land/x/dax@0.37.1/mod.ts";
 import { Octokit } from "npm:octokit@^3.1";
-import { cyan, magenta } from "std/fmt/colors.ts";
-import { ensureFile } from "std/fs/ensure_file.ts";
-import { join } from "std/path/join.ts";
+import { cyan, magenta } from "https://deno.land/std@0.214.0/fmt/colors.ts";
+import { ensureFile } from "https://deno.land/std@0.214.0/fs/ensure_file.ts";
+import { join } from "https://deno.land/std@0.214.0/path/join.ts";
 
 import {
   applyVersionBump,
@@ -27,10 +27,10 @@ import {
 const separator = "#%$".repeat(35);
 
 export type BumpWorkspaceOptions = {
-  /** The git tag or commit hash to start from. */
+  /** The git tag or commit hash to start from. The default is the latest tag. */
   start?: string;
-  /** The base branch name to compare commits. */
-  baseBranchName?: string;
+  /** The base branch name to compare commits. The default is the current branch. */
+  base?: string;
   parseCommitMessage?: (commit: Commit) => VersionBump[] | Diagnostic;
   /** The root directory of the workspace. */
   root?: string;
@@ -50,11 +50,23 @@ export type BumpWorkspaceOptions = {
   releaseNotePath?: string;
 };
 
+/**
+ * Bump the versions of the modules in the workspaces.
+ *
+ * The workflow of this function is:
+ * - Read workspaces info from the deno.json in the given `root`.
+ * - Read commit messages between the given `start` and `base`.
+ * - Detect necessary version updates from the commit messages.
+ * - Update the versions in the deno.json files.
+ * - Create a release note.
+ * - Create a git commit with given `gitUserName` and `gitUserEmail`.
+ * - Create a pull request, targeting the given `base` branch.
+ */
 export async function bumpWorkspaces(
   {
     parseCommitMessage = defaultParseCommitMessage,
     start,
-    baseBranchName,
+    base,
     gitUserName = "denobot",
     gitUserEmail = "33910674+denobot@users.noreply.github.com",
     githubToken,
@@ -68,10 +80,10 @@ export async function bumpWorkspaces(
   const [configPath, modules] = await getWorkspaceModules(root);
   start ??= await $`git describe --tags --abbrev=0`.text();
   const newBranchName = createReleaseBranchName(now);
-  baseBranchName ??= await $`git branch --show-current`.text();
+  base ??= await $`git branch --show-current`.text();
   releaseNotePath = join(root, releaseNotePath);
   const text =
-    await $`git --no-pager log --pretty=format:${separator}%H%B ${start}..${baseBranchName}`
+    await $`git --no-pager log --pretty=format:${separator}%H%B ${start}..${base}`
       .text();
   const commits = text.split(separator).map((commit) => {
     const hash = commit.slice(0, 40);
@@ -89,7 +101,7 @@ export async function bumpWorkspaces(
   console.log(
     `Found ${cyan(commits.length.toString())} commits between ${
       magenta(start)
-    } and ${magenta(baseBranchName)}.`,
+    } and ${magenta(base)}.`,
   );
   const versionBumps: VersionBump[] = [];
   const diagnostics: Diagnostic[] = [];
@@ -190,7 +202,7 @@ export async function bumpWorkspaces(
         {
           owner,
           repo,
-          base: baseBranchName,
+          base: base,
           head: newBranchName,
           draft: true,
           title: `Release ${createReleaseTitle(now)}`,
@@ -202,18 +214,4 @@ export async function bumpWorkspaces(
   }
 
   console.log("Done.");
-}
-
-if (import.meta.main) {
-  const githubToken = Deno.env.get("GITHUB_TOKEN");
-  if (githubToken === undefined) {
-    console.error("GITHUB_TOKEN is not set.");
-    Deno.exit(1);
-  }
-  const githubRepo = Deno.env.get("GITHUB_REPOSITORY");
-  if (githubRepo === undefined) {
-    console.error("GITHUB_REPOSITORY is not set.");
-    Deno.exit(1);
-  }
-  await bumpWorkspaces({ githubToken, githubRepo, dryRun: false });
 }
