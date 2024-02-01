@@ -2,7 +2,8 @@
 
 > A tool for releasing workspaces in Deno.
 
-This tool automatically detects necessary version updates for the workspaces and creates a PR with necessary changes.
+This tool automatically detects necessary version updates for the workspaces and
+creates a PR with necessary changes.
 
 ```
 deno run --allow-read=. --allow-write=. jsr:@deno/bump_workspaces

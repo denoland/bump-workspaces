@@ -662,7 +662,7 @@ Deno.test("tryGetDenoConfig()", async () => {
 });
 
 Deno.test("getWorkspaceModules()", async (t) => {
-  const modules = await getWorkspaceModules("testdata/basic");
+  const [_, modules] = await getWorkspaceModules("testdata/basic");
   assertEquals(modules.length, 5);
   assertEquals(modules.map((m) => m.name), [
     "@scope/foo",
@@ -675,7 +675,7 @@ Deno.test("getWorkspaceModules()", async (t) => {
 });
 
 Deno.test("getModule", async () => {
-  const modules = await getWorkspaceModules("testdata/basic");
+  const [_, modules] = await getWorkspaceModules("testdata/basic");
   const mod = getModule("foo", modules);
   assertExists(mod);
   assertObjectMatch(mod, {
@@ -776,7 +776,7 @@ async function createVersionUpdateResults(
 }
 
 Deno.test("createReleaseNote()", async (t) => {
-  const modules = await getWorkspaceModules("testdata/std_mock");
+  const [_, modules] = await getWorkspaceModules("testdata/std_mock");
   const [updates, _diagnostics] = await createVersionUpdateResults(
     exampleVersionBumps,
     modules,
@@ -785,7 +785,7 @@ Deno.test("createReleaseNote()", async (t) => {
 });
 
 Deno.test("createPrBody()", async (t) => {
-  const modules = await getWorkspaceModules("testdata/std_mock");
+  const [_, modules] = await getWorkspaceModules("testdata/std_mock");
   const [updates, diagnostics] = await createVersionUpdateResults(
     exampleVersionBumps,
     modules,

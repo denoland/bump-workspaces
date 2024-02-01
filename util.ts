@@ -228,9 +228,9 @@ export async function tryGetDenoConfig(
 }
 
 export async function getWorkspaceModules(
-  root = ".",
-): Promise<WorkspaceModule[]> {
-  const [_, denoConfig] = await tryGetDenoConfig(root);
+  root: string,
+): Promise<[string, WorkspaceModule[]]> {
+  const [path, denoConfig] = await tryGetDenoConfig(root);
   const workspaces = denoConfig.workspaces;
 
   if (!Array.isArray(workspaces)) {
@@ -253,7 +253,7 @@ export async function getWorkspaceModules(
     }
     result.push({ ...workspaceConfig, [pathProp]: path });
   }
-  return result;
+  return [path, result];
 }
 
 export function getModule(module: string, modules: WorkspaceModule[]) {
