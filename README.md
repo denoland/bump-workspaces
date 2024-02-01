@@ -1,13 +1,15 @@
 # bump_workspaces
 
-> A tool for releasing workspaces in Deno.
+> A tool for releasing workspaces with Deno project.
 
 This tool automatically detects necessary version updates for the workspaces and
 creates a PR with necessary changes.
 
+```sh
+deno run -A https://deno.land/x/bump_workspaces@v0.1.0/cli.ts
 ```
-deno run --allow-read=. --allow-write=. jsr:@deno/bump_workspaces
-```
+
+TODO(kt3k): Example of github actions yaml
 
 TODO(kt3k): link to example PR
 
@@ -24,10 +26,10 @@ Some examples are:
 
 ```
 fix(foo): fix a bug
+fix(baz,qux): fix a bug
 feat(bar): add a new feature
 chore(foo): clean up
 chore(bar): clean up
-fix(baz,qux): fix a bug
 BREAKING(quux): some breaking change
 ```
 
