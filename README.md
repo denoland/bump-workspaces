@@ -6,11 +6,9 @@
 [![codecov](https://codecov.io/gh/denoland/bump_workspaces/graph/badge.svg?token=KUT5Q1PJE6)](https://codecov.io/gh/denoland/bump_workspaces)
 
 This tool automatically detects necessary version updates for the workspaces and
-creates a PR with necessary changes.
+creates a PR with necessary version changes.
 
-```sh
-deno run -A https://deno.land/x/bump_workspaces@v0.1.3/cli.ts --dry-run
-```
+Set up the GitHub Actions yaml like the below, and trigger the workflow manually:
 
 ```yaml
 name: version_bump
@@ -39,6 +37,10 @@ jobs:
 ```
 
 Example pull request: https://github.com/kt3k/deno_std/pull/34
+
+## How it works
+
+TBD
 
 ## Commit titles
 
