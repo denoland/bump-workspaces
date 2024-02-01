@@ -2,6 +2,9 @@
 
 > A tool for releasing workspaces with Deno project.
 
+[![ci](https://github.com/denoland/bump_workspaces/actions/workflows/ci.yml/badge.svg)](https://github.com/denoland/bump_workspaces/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/denoland/bump_workspaces/graph/badge.svg?token=KUT5Q1PJE6)](https://codecov.io/gh/denoland/bump_workspaces)
+
 This tool automatically detects necessary version updates for the workspaces and
 creates a PR with necessary changes.
 
