@@ -1,7 +1,7 @@
 {
   "lock": false,
   "name": "@deno/bump_workspaces",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "tasks": {
     "test": "deno test -A",
     "cov": "rm -rf coverage && deno test -A --coverage && deno coverage --html && deno coverage --lcov --output=coverage/lcov.info",
