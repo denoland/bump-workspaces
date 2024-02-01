@@ -9,7 +9,7 @@ This tool automatically detects necessary version updates for the workspaces and
 creates a PR with necessary changes.
 
 ```sh
-deno run -A https://deno.land/x/bump_workspaces@v0.1.2/cli.ts --dry-run
+deno run -A https://deno.land/x/bump_workspaces@v0.1.3/cli.ts --dry-run
 ```
 
 ```yaml
@@ -33,7 +33,7 @@ jobs:
       - name: Run workspaces version bump
         run: |
           git fetch --unshallow origin
-          deno run -A https://deno.land/x/bump_workspaces@v0.1.2/cli.ts
+          deno run -A https://deno.land/x/bump_workspaces@v0.1.3/cli.ts
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
 ```
