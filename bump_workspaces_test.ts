@@ -72,7 +72,7 @@ Deno.test("bumpWorkspaces()", async (t) => {
 
 Deno.test(
   "bumpWorkspaces() doesn't write things when dry run specified",
-  async (t) => {
+  async () => {
     const dir = await Deno.makeTempDir();
     await copy("testdata/basic", dir, { overwrite: true });
     await bumpWorkspaces({
