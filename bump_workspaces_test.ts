@@ -15,7 +15,7 @@ Deno.test("bumpWorkspaces()", async (t) => {
     dryRun: "git",
     githubRepo: "denoland/deno_std",
     githubToken: "1234567890",
-    baseBranchName: "base-branch-for-testing",
+    baseBranchName: "origin/base-branch-for-testing",
     start: "start-tag-for-testing",
     root: dir,
   });
@@ -79,7 +79,7 @@ Deno.test(
       dryRun: true,
       githubRepo: "denoland/deno_std",
       githubToken: "1234567890",
-      baseBranchName: "base-branch-for-testing",
+      baseBranchName: "origin/base-branch-for-testing",
       start: "start-tag-for-testing",
       root: dir,
     });
