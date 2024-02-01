@@ -8,7 +8,8 @@
 This tool automatically detects necessary version updates for the workspaces and
 creates a PR with necessary version changes.
 
-Set up the GitHub Actions yaml like the below, and trigger the workflow manually:
+Set up the GitHub Actions yaml like the below, and trigger the workflow
+manually:
 
 ```yaml
 name: version_bump
@@ -101,6 +102,12 @@ version will be update.
 | test        | patch   |
 | style       | patch   |
 | chore       | patch   |
+
+TODO(kt3k): document scopre required tags.
+
+## Customize version detection
+
+TBD
 
 # License
 
