@@ -96,7 +96,6 @@ export async function bumpWorkspaces(
     const body = commit.slice(i + 1).trim();
     return { hash, subject, body };
   });
-  console.log(commits);
   commits.shift();
   console.log(
     `Found ${cyan(commits.length.toString())} commits between ${
