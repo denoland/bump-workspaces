@@ -1,14 +1,21 @@
 // Copyright 2024 the Deno authors. All rights reserved. MIT license.
 
-import { assertEquals } from "std/assert/mod.ts";
+import {
+  assertEquals,
+  assertExists,
+  assertObjectMatch,
+} from "std/assert/mod.ts";
 import { assertSnapshot } from "std/testing/snapshot.ts";
 import denoJson from "./deno.json" with { type: "json" };
 import {
   applyVersionBump,
   checkModuleName,
+  createPrBody,
   createReleaseBranchName,
+  createReleaseNote,
   createReleaseTitle,
   defaultParseCommitMessage,
+  getModule,
   getWorkspaceModules,
   maxVersion,
   pathProp,
@@ -653,7 +660,7 @@ Deno.test("tryGetDenoConfig()", async () => {
 });
 
 Deno.test("getWorkspaceModules()", async (t) => {
-  const modules = await getWorkspaceModules("testdata");
+  const modules = await getWorkspaceModules("testdata/basic");
   assertEquals(modules.length, 5);
   assertEquals(modules.map((m) => m.name), [
     "@scope/foo",
@@ -663,6 +670,16 @@ Deno.test("getWorkspaceModules()", async (t) => {
     "@scope/quux",
   ]);
   await assertSnapshot(t, modules);
+});
+
+Deno.test("getModule", async () => {
+  const modules = await getWorkspaceModules("testdata/basic");
+  const mod = getModule("foo", modules);
+  assertExists(mod);
+  assertObjectMatch(mod, {
+    name: "@scope/foo",
+    version: "1.2.3",
+  });
 });
 
 Deno.test("applyVersionBump() updates the version of the given module", async () => {
@@ -729,6 +746,13 @@ Deno.test("applyVersionBump() consider major bump for 0.x version as minor bump"
       }
     }`,
   );
+});
+
+Deno.test("createReleaseNote()", () => {
+  //createReleaseNote()
+});
+
+Deno.test("createPrBody()", () => {
 });
 
 Deno.test("createReleaseBranchName()", () => {

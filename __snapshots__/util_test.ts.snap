@@ -342,27 +342,27 @@ snapshot[`summarizeVersionBumpsByModule() 1`] = `
 snapshot[`getWorkspaceModules() 1`] = `
 [
   {
-    [Symbol(path)]: "testdata/foo/deno.json",
+    [Symbol(path)]: "testdata/basic/foo/deno.json",
     name: "@scope/foo",
     version: "1.2.3",
   },
   {
-    [Symbol(path)]: "testdata/bar/deno.json",
+    [Symbol(path)]: "testdata/basic/bar/deno.json",
     name: "@scope/bar",
     version: "2.3.4",
   },
   {
-    [Symbol(path)]: "testdata/baz/deno.json",
+    [Symbol(path)]: "testdata/basic/baz/deno.json",
     name: "@scope/baz",
     version: "0.2.3",
   },
   {
-    [Symbol(path)]: "testdata/qux/deno.json",
+    [Symbol(path)]: "testdata/basic/qux/deno.json",
     name: "@scope/qux",
     version: "0.3.4",
   },
   {
-    [Symbol(path)]: "testdata/quux/deno.json",
+    [Symbol(path)]: "testdata/basic/quux/deno.json",
     name: "@scope/quux",
     version: "0.0.0",
   },

@@ -45,7 +45,7 @@ export function nop() {
   // Do nothing
 }
 
-export async function bumpWorkspace(
+export async function bumpWorkspaces(
   {
     parseCommitMessage = defaultParseCommitMessage,
     start,
@@ -137,7 +137,9 @@ export async function bumpWorkspace(
   }
   console.table(updates, ["diff", "from", "to", "path"]);
 
-  console.log(`Found ${cyan(diagnostics.length.toString())} unknown commits:`);
+  console.log(
+    `Found ${cyan(diagnostics.length.toString())} unhandled commits:`,
+  );
   for (const unknownCommit of diagnostics) {
     console.log(`  ${unknownCommit.type} ${unknownCommit.commit.subject}`);
   }
@@ -206,5 +208,5 @@ if (import.meta.main) {
     console.error("GITHUB_REPOSITORY is not set.");
     Deno.exit(1);
   }
-  await bumpWorkspace({ githubToken, githubRepo, dryRun: false });
+  await bumpWorkspaces({ githubToken, githubRepo, dryRun: false });
 }
