@@ -16,3 +16,5 @@ jobs:
           git fetch origin # some branches are necessary for testing
           deno task cov
       - uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
