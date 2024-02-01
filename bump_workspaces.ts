@@ -120,20 +120,14 @@ export async function bumpWorkspaces(
   let denoJson = await Deno.readTextFile("deno.json");
   for (const summary of summaries) {
     const module = getModule(summary.module, modules)!;
-    const applied = await applyVersionBump(
+    const [denoJson_, versionUpdate] = await applyVersionBump(
       summary,
       module,
       denoJson,
       dryRun,
     );
-    denoJson = applied.denoJson;
-    updates[module.name] = {
-      diff: applied.diff,
-      from: applied.oldVersion,
-      to: applied.newVersion,
-      path: module[pathProp],
-      summary,
-    };
+    denoJson = denoJson_;
+    updates[module.name] = versionUpdate;
   }
   console.table(updates, ["diff", "from", "to", "path"]);
 

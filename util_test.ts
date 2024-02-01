@@ -15,6 +15,7 @@ import {
   createReleaseNote,
   createReleaseTitle,
   defaultParseCommitMessage,
+  type Diagnostic,
   getModule,
   getWorkspaceModules,
   maxVersion,
@@ -23,6 +24,7 @@ import {
   VersionBump,
 } from "./util.ts";
 import { tryGetDenoConfig } from "./util.ts";
+import { WorkspaceModule } from "./util.ts";
 
 const emptyCommit = {
   subject: "",
@@ -683,10 +685,11 @@ Deno.test("getModule", async () => {
 });
 
 Deno.test("applyVersionBump() updates the version of the given module", async () => {
-  const appliedChange = await applyVersionBump(
+  const [denoJson, versionUpdate] = await applyVersionBump(
     {
       module: "foo",
       version: "minor",
+      commits: [],
     },
     { name: "@scope/foo", version: "1.0.0", [pathProp]: "foo/deno.json" },
     `{
@@ -699,11 +702,11 @@ Deno.test("applyVersionBump() updates the version of the given module", async ()
     }`,
     true,
   );
-  assertEquals(appliedChange.oldVersion, "1.0.0");
-  assertEquals(appliedChange.newVersion, "1.1.0");
-  assertEquals(appliedChange.diff, "minor");
+  assertEquals(versionUpdate.from, "1.0.0");
+  assertEquals(versionUpdate.to, "1.1.0");
+  assertEquals(versionUpdate.diff, "minor");
   assertEquals(
-    appliedChange.denoJson,
+    denoJson,
     `{
       "imports": {
         "scope/foo": "jsr:@scope/foo@^1.1.0",
@@ -716,10 +719,11 @@ Deno.test("applyVersionBump() updates the version of the given module", async ()
 });
 
 Deno.test("applyVersionBump() consider major bump for 0.x version as minor bump", async () => {
-  const appliedChange = await applyVersionBump(
+  const [denoJson, updateResult] = await applyVersionBump(
     {
       module: "foo",
       version: "major",
+      commits: [],
     },
     { name: "@scope/foo", version: "0.0.0", [pathProp]: "foo/deno.jsonc" },
     `{
@@ -732,11 +736,11 @@ Deno.test("applyVersionBump() consider major bump for 0.x version as minor bump"
     }`,
     true,
   );
-  assertEquals(appliedChange.oldVersion, "0.0.0");
-  assertEquals(appliedChange.newVersion, "0.1.0");
-  assertEquals(appliedChange.diff, "minor");
+  assertEquals(updateResult.from, "0.0.0");
+  assertEquals(updateResult.to, "0.1.0");
+  assertEquals(updateResult.diff, "minor");
   assertEquals(
-    appliedChange.denoJson,
+    denoJson,
     `{
       "imports": {
         "scope/foo": "jsr:@scope/foo@^0.1.0",
@@ -748,11 +752,48 @@ Deno.test("applyVersionBump() consider major bump for 0.x version as minor bump"
   );
 });
 
-Deno.test("createReleaseNote()", () => {
-  //createReleaseNote()
+async function createVersionUpdateResults(
+  versionBumps: VersionBump[],
+  modules: WorkspaceModule[],
+) {
+  const summaries = summarizeVersionBumpsByModule(versionBumps).filter((
+    { module },
+  ) => getModule(module, modules) !== undefined);
+  const diagnostics = versionBumps.map((versionBump) =>
+    checkModuleName(versionBump, modules)
+  ).filter(Boolean) as Diagnostic[];
+  const updates = [];
+  for (const summary of summaries) {
+    const [_denoJson, versionUpdate] = await applyVersionBump(
+      summary,
+      getModule(summary.module, modules)!,
+      "",
+      true,
+    );
+    updates.push(versionUpdate);
+  }
+  return [updates, diagnostics] as const;
+}
+
+Deno.test("createReleaseNote()", async (t) => {
+  const modules = await getWorkspaceModules("testdata/std_mock");
+  const [updates, _diagnostics] = await createVersionUpdateResults(
+    exampleVersionBumps,
+    modules,
+  );
+  await assertSnapshot(t, createReleaseNote(updates, modules, new Date(0)));
 });
 
-Deno.test("createPrBody()", () => {
+Deno.test("createPrBody()", async (t) => {
+  const modules = await getWorkspaceModules("testdata/std_mock");
+  const [updates, diagnostics] = await createVersionUpdateResults(
+    exampleVersionBumps,
+    modules,
+  );
+  await assertSnapshot(
+    t,
+    createPrBody(updates, diagnostics, "denoland/deno_std"),
+  );
 });
 
 Deno.test("createReleaseBranchName()", () => {

@@ -173,7 +173,8 @@ export function summarizeVersionBumpsByModule(
       return priorityA < priorityB ? -1 : 1;
     });
   }
-  return Object.values(result);
+
+  return Object.values(result).sort((a, b) => a.module < b.module ? -1 : 1);
 }
 
 export function maxVersion(
@@ -278,11 +279,11 @@ export function checkModuleName(
 
 /** Apply the version bump to the file system. */
 export async function applyVersionBump(
-  summary: Pick<VersionBumpSummary, "module" | "version">,
+  summary: VersionBumpSummary,
   module: WorkspaceModule,
   denoJson: string,
   dryRun = false,
-): Promise<AppliedVersionBump> {
+): Promise<[denoJson: string, VersionUpdateResult]> {
   const oldVersionStr = module.version;
   const oldVersion = parseSemVer(oldVersionStr);
   let diff = summary.version;
@@ -306,12 +307,13 @@ export async function applyVersionBump(
       `Currently this tool doesn't keep the comments in deno.jsonc files. Comments in the path "${path}" might be removed by this update.`,
     );
   }
-  return {
-    oldVersion: oldVersionStr,
-    newVersion: newVersionStr,
+  return [denoJson, {
+    from: oldVersionStr,
+    to: newVersionStr,
     diff,
-    denoJson,
-  };
+    summary,
+    path,
+  }];
 }
 
 export function createReleaseNote(
