@@ -13,6 +13,6 @@ jobs:
       - run: deno fmt --check
       - run: deno lint
       - run: |
-        git fetch origin # some branches are necessary for testing
-        deno task cov
+          git fetch origin # some branches are necessary for testing
+          deno task cov
       - uses: codecov/codecov-action@v4
