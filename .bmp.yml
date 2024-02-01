@@ -1,0 +1,5 @@
+version: 0.1.3
+commit: '%.%.%'
+files:
+  README.md: https://deno.land/x/bump_workspaces@v%.%.%/cli.ts
+  deno.json: '"version": "%.%.%"'
