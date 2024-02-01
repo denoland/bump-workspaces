@@ -9,7 +9,7 @@ This tool automatically detects necessary version updates for the workspaces and
 creates a PR with necessary changes.
 
 ```sh
-deno run -A https://deno.land/x/bump_workspaces@v0.1.1/cli.ts
+deno run -A https://deno.land/x/bump_workspaces@v0.1.2/cli.ts
 ```
 
 TODO(kt3k): Example of github actions yaml
