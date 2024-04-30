@@ -103,7 +103,7 @@ version will be update.
 | style       | patch   |
 | chore       | patch   |
 
-TODO(kt3k): document scopre required tags.
+TODO(kt3k): document scope-required tags.
 
 ## Customize version detection
 
