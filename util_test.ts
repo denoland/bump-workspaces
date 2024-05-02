@@ -17,10 +17,10 @@ import {
   maxVersion,
   pathProp,
   summarizeVersionBumpsByModule,
-  VersionBump,
+  type VersionBump,
 } from "./util.ts";
 import { tryGetDenoConfig } from "./util.ts";
-import { WorkspaceModule } from "./util.ts";
+import type { WorkspaceModule } from "./util.ts";
 
 const emptyCommit = {
   subject: "",
