@@ -4,7 +4,7 @@
   "exports": {
     ".": "./cli.ts"
   },
-  "version": "0.1.5",
+  "version": "0.1.6",
   "tasks": {
     "test": "deno test -A",
     "cov": "rm -rf coverage && deno test -A --coverage && deno coverage --html && deno coverage --lcov --output=coverage/lcov.info",
