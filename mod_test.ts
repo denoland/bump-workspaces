@@ -1,12 +1,11 @@
 // Copyright 2024 the Deno authors. All rights reserved. MIT license.
 
-import { assertSnapshot } from "std/testing/snapshot.ts";
-import { copy, exists } from "std/fs/mod.ts";
+import { assertSnapshot } from "@std/testing/snapshot";
+import { copy, exists } from "@std/fs";
 import { bumpWorkspaces } from "./mod.ts";
-import { join } from "std/path/mod.ts";
-import { assertEquals } from "std/assert/assert_equals.ts";
+import { join } from "@std/path";
 import { tryGetDenoConfig } from "./util.ts";
-import { assert } from "std/assert/assert.ts";
+import { assert, assertEquals } from "@std/assert";
 
 Deno.test("bumpWorkspaces()", async (t) => {
   const dir = await Deno.makeTempDir();

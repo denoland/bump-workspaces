@@ -1,10 +1,10 @@
 // Copyright 2024 the Deno authors. All rights reserved. MIT license.
 
-import { $ } from "https://deno.land/x/dax@0.37.1/mod.ts";
+import { $ } from "@david/dax";
 import { Octokit } from "npm:octokit@^3.1";
-import { cyan, magenta } from "https://deno.land/std@0.214.0/fmt/colors.ts";
-import { ensureFile } from "https://deno.land/std@0.214.0/fs/ensure_file.ts";
-import { join } from "https://deno.land/std@0.214.0/path/join.ts";
+import { cyan, magenta } from "@std/fmt/colors";
+import { ensureFile } from "@std/fs/ensure-file";
+import { join } from "@std/path/join";
 
 import {
   applyVersionBump,

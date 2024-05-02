@@ -1,11 +1,7 @@
 // Copyright 2024 the Deno authors. All rights reserved. MIT license.
 
-import {
-  assertEquals,
-  assertExists,
-  assertObjectMatch,
-} from "std/assert/mod.ts";
-import { assertSnapshot } from "std/testing/snapshot.ts";
+import { assertEquals, assertExists, assertObjectMatch } from "@std/assert";
+import { assertSnapshot } from "@std/testing/snapshot";
 import denoJson from "./deno.json" with { type: "json" };
 import {
   applyVersionBump,
@@ -21,10 +17,10 @@ import {
   maxVersion,
   pathProp,
   summarizeVersionBumpsByModule,
-  VersionBump,
+  type VersionBump,
 } from "./util.ts";
 import { tryGetDenoConfig } from "./util.ts";
-import { WorkspaceModule } from "./util.ts";
+import type { WorkspaceModule } from "./util.ts";
 
 const emptyCommit = {
   subject: "",
