@@ -1,6 +1,6 @@
 {
   "lock": false,
-  "name": "@deno/bump_workspaces",
+  "name": "@deno/bump-workspaces",
   "version": "0.1.4",
   "tasks": {
     "test": "deno test -A",
