@@ -1,12 +1,12 @@
-# bump_workspaces
+# @deno/bump-workspaces
 
-> A tool for releasing workspaces with Deno project.
+> A tool for releasing workspaces project in Deno.
 
-[![ci](https://github.com/denoland/bump_workspaces/actions/workflows/ci.yml/badge.svg)](https://github.com/denoland/bump_workspaces/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/denoland/bump_workspaces/graph/badge.svg?token=KUT5Q1PJE6)](https://codecov.io/gh/denoland/bump_workspaces)
+[![ci](https://github.com/denoland/bump-workspaces/actions/workflows/ci.yml/badge.svg)](https://github.com/denoland/bump-workspaces/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/denoland/bump-workspaces/graph/badge.svg?token=KUT5Q1PJE6)](https://codecov.io/gh/denoland/bump-workspaces)
 
-This tool automatically detects necessary version updates for the workspaces and
-creates a PR with necessary version changes.
+This tool automatically detects necessary version updates for workspaces-enabled
+projects and creates a PR with necessary version changes.
 
 Set up the GitHub Actions yaml like the below, and trigger the workflow
 manually:
@@ -32,7 +32,7 @@ jobs:
       - name: Run workspaces version bump
         run: |
           git fetch --unshallow origin
-          deno run -A https://deno.land/x/bump_workspaces@v0.1.4/cli.ts
+          deno run -A jsr:@deno/bump-workspaces@0.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
 ```
