@@ -1,11 +1,7 @@
 // Copyright 2024 the Deno authors. All rights reserved. MIT license.
 
-import {
-  assertEquals,
-  assertExists,
-  assertObjectMatch,
-} from "std/assert/mod.ts";
-import { assertSnapshot } from "std/testing/snapshot.ts";
+import { assertEquals, assertExists, assertObjectMatch } from "@std/assert";
+import { assertSnapshot } from "@std/testing/snapshot";
 import denoJson from "./deno.json" with { type: "json" };
 import {
   applyVersionBump,
