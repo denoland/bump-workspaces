@@ -97,7 +97,7 @@ export async function bumpWorkspaces(
   }: BumpWorkspaceOptions = {},
 ) {
   const now = new Date();
-  const [configPath, modules] = await getWorkspaceModules(root);
+  const modules = await getWorkspaceModules(root);
   start ??= await $`git describe --tags --abbrev=0`.text();
   const newBranchName = createReleaseBranchName(now);
   base ??= await $`git branch --show-current`.text();
