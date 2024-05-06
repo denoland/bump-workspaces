@@ -137,7 +137,9 @@ version will be update.
 
 ## Scope required tags
 
-The following tags require scope specified because they don't make sense without scopes. If these tags specified without scopes, they are raised as diagnostics in README.
+The following tags require scope specified because they don't make sense without
+scopes. If these tags specified without scopes, they are raised as diagnostics
+in README.
 
 - BREAKING
 - feat
