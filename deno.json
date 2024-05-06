@@ -5,7 +5,7 @@
     ".": "./mod.ts",
     "./cli": "./cli.ts"
   },
-  "version": "0.1.9",
+  "version": "0.1.10",
   "tasks": {
     "test": "deno test -A",
     "cov": "rm -rf coverage && deno test -A --coverage && deno coverage --html && deno coverage --lcov --output=coverage/lcov.info",
