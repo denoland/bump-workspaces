@@ -28,18 +28,6 @@ Deno.test("bumpWorkspaces()", async (t) => {
   let _, config;
   [_, config] = await tryGetDenoConfig(dir);
   assertEquals(config, {
-    imports: {
-      "@scope/foo": "jsr:@scope/foo@^2.0.0",
-      "@scope/foo/": "jsr:@scope/foo@^2.0.0/",
-      "@scope/bar": "jsr:@scope/bar@^2.3.5",
-      "@scope/bar/": "jsr:@scope/bar@^2.3.5/",
-      "@scope/baz": "jsr:@scope/baz@^0.3.0",
-      "@scope/baz/": "jsr:@scope/baz@^0.3.0/",
-      "@scope/qux": "jsr:@scope/qux@^0.3.5",
-      "@scope/qux/": "jsr:@scope/qux@^0.3.5/",
-      "@scope/quux": "jsr:@scope/quux@^0.1.0",
-      "@scope/quux/": "jsr:@scope/quux@^0.1.0/",
-    },
     workspaces: ["./foo", "./bar", "./baz", "./qux", "./quux"],
   });
   [_, config] = await tryGetDenoConfig(join(dir, "foo"));
@@ -87,18 +75,6 @@ Deno.test(
 
     const [_, config] = await tryGetDenoConfig(dir);
     assertEquals(config, {
-      imports: {
-        "@scope/foo": "jsr:@scope/foo@^1.2.3",
-        "@scope/foo/": "jsr:@scope/foo@^1.2.3/",
-        "@scope/bar": "jsr:@scope/bar@^2.3.4",
-        "@scope/bar/": "jsr:@scope/bar@^2.3.4/",
-        "@scope/baz": "jsr:@scope/baz@^0.2.3",
-        "@scope/baz/": "jsr:@scope/baz@^0.2.3/",
-        "@scope/qux": "jsr:@scope/qux@^0.3.4",
-        "@scope/qux/": "jsr:@scope/qux@^0.3.4/",
-        "@scope/quux": "jsr:@scope/quux@^0.0.0",
-        "@scope/quux/": "jsr:@scope/quux@^0.0.0/",
-      },
       workspaces: ["./foo", "./bar", "./baz", "./qux", "./quux"],
     });
   },

@@ -57,6 +57,8 @@ export type BumpWorkspaceOptions = {
  * The workflow of this function is:
  * - Read workspaces info from the deno.json in the given `root`.
  * - Read commit messages between the given `start` and `base`.
+ *   - `start` defaults to the latest tag in the current branch (=`git describe --tags --abbrev=0`)
+ *   - `base` defaults to the current branch (=`git branch --show-current`)
  * - Detect necessary version updates from the commit messages.
  * - Update the versions in the deno.json files.
  * - Create a release note.
@@ -82,6 +84,10 @@ export async function bumpWorkspaces(
   start ??= await $`git describe --tags --abbrev=0`.text();
   const newBranchName = createReleaseBranchName(now);
   base ??= await $`git branch --show-current`.text();
+  if (!base) {
+    console.error("The current branch is not found.");
+    Deno.exit(1);
+  }
   releaseNotePath = join(root, releaseNotePath);
   const text =
     await $`git --no-pager log --pretty=format:${separator}%H%B ${start}..${base}`
@@ -153,7 +159,7 @@ export async function bumpWorkspaces(
   console.table(updates, ["diff", "from", "to", "path"]);
 
   console.log(
-    `Found ${cyan(diagnostics.length.toString())} unhandled commits:`,
+    `Found ${cyan(diagnostics.length.toString())} diagnostics:`,
   );
   for (const unknownCommit of diagnostics) {
     console.log(`  ${unknownCommit.type} ${unknownCommit.commit.subject}`);
@@ -162,10 +168,11 @@ export async function bumpWorkspaces(
   const releaseNote = createReleaseNote(Object.values(updates), modules, now);
 
   if (dryRun === true) {
-    console.log("Skip making a commit.");
-    console.log("Skip making a pull request.");
     console.log();
+    console.log(cyan("The release note:"));
     console.log(releaseNote);
+    console.log(cyan("Skip making a commit."));
+    console.log(cyan("Skip making a pull request."));
   } else {
     // Updates deno.json
     await Deno.writeTextFile(configPath, denoJson);
@@ -217,7 +224,7 @@ export async function bumpWorkspaces(
       );
       console.log("New pull request:", cyan(openedPr.data.html_url));
     }
-  }
 
-  console.log("Done.");
+    console.log("Done.");
+  }
 }
