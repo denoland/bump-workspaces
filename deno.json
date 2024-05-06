@@ -2,7 +2,8 @@
   "lock": false,
   "name": "@deno/bump-workspaces",
   "exports": {
-    ".": "./cli.ts"
+    ".": "./mod.ts",
+    "cli": "./cli.ts"
   },
   "version": "0.1.6",
   "tasks": {

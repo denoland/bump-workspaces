@@ -26,6 +26,7 @@ import {
 // A random separator that is unlikely to be in a commit message.
 const separator = "#%$".repeat(35);
 
+/** The option for {@linkcode bumpWorkspaces} */
 export type BumpWorkspaceOptions = {
   /** The git tag or commit hash to start from. The default is the latest tag. */
   start?: string;
