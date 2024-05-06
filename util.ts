@@ -229,8 +229,8 @@ export async function tryGetDenoConfig(
 
 export async function getWorkspaceModules(
   root: string,
-): Promise<[string, WorkspaceModule[]]> {
-  const [path, denoConfig] = await tryGetDenoConfig(root);
+): Promise<WorkspaceModule[]> {
+  const [_path, denoConfig] = await tryGetDenoConfig(root);
   const workspaces = denoConfig.workspaces;
 
   if (!Array.isArray(workspaces)) {
@@ -253,7 +253,7 @@ export async function getWorkspaceModules(
     }
     result.push({ ...workspaceConfig, [pathProp]: path });
   }
-  return [path, result];
+  return result;
 }
 
 export function getModule(module: string, modules: WorkspaceModule[]) {
@@ -281,9 +281,8 @@ export function checkModuleName(
 export async function applyVersionBump(
   summary: VersionBumpSummary,
   module: WorkspaceModule,
-  denoJson: string,
   dryRun = false,
-): Promise<[denoJson: string, VersionUpdateResult]> {
+): Promise<VersionUpdateResult> {
   const oldVersionStr = module.version;
   const oldVersion = parseSemVer(oldVersionStr);
   let diff = summary.version;
@@ -303,13 +302,13 @@ export async function applyVersionBump(
       `Currently this tool doesn't keep the comments in deno.jsonc files. Comments in the path "${path}" might be removed by this update.`,
     );
   }
-  return [denoJson, {
+  return {
     from: oldVersionStr,
     to: newVersionStr,
     diff,
     summary,
     path,
-  }];
+  };
 }
 
 export function createReleaseNote(
