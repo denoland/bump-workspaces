@@ -681,43 +681,33 @@ Deno.test("getModule", async () => {
 });
 
 Deno.test("applyVersionBump() updates the version of the given module", async () => {
-  const [denoJson, versionUpdate] = await applyVersionBump(
+  const versionUpdate = await applyVersionBump(
     {
       module: "foo",
       version: "minor",
       commits: [],
     },
     { name: "@scope/foo", version: "1.0.0", [pathProp]: "foo/deno.json" },
-    `{}`,
     true,
   );
   assertEquals(versionUpdate.from, "1.0.0");
   assertEquals(versionUpdate.to, "1.1.0");
   assertEquals(versionUpdate.diff, "minor");
-  assertEquals(
-    denoJson,
-    `{}`,
-  );
 });
 
 Deno.test("applyVersionBump() consider major bump for 0.x version as minor bump", async () => {
-  const [denoJson, updateResult] = await applyVersionBump(
+  const updateResult = await applyVersionBump(
     {
       module: "foo",
       version: "major",
       commits: [],
     },
     { name: "@scope/foo", version: "0.0.0", [pathProp]: "foo/deno.jsonc" },
-    `{}`,
     true,
   );
   assertEquals(updateResult.from, "0.0.0");
   assertEquals(updateResult.to, "0.1.0");
   assertEquals(updateResult.diff, "minor");
-  assertEquals(
-    denoJson,
-    `{}`,
-  );
 });
 
 async function createVersionUpdateResults(
@@ -732,10 +722,9 @@ async function createVersionUpdateResults(
   ).filter(Boolean) as Diagnostic[];
   const updates = [];
   for (const summary of summaries) {
-    const [_denoJson, versionUpdate] = await applyVersionBump(
+    const versionUpdate = await applyVersionBump(
       summary,
       getModule(summary.module, modules)!,
-      "",
       true,
     );
     updates.push(versionUpdate);
