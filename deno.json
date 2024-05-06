@@ -3,7 +3,7 @@
   "name": "@deno/bump-workspaces",
   "exports": {
     ".": "./mod.ts",
-    "cli": "./cli.ts"
+    "./cli": "./cli.ts"
   },
   "version": "0.1.7",
   "tasks": {
