@@ -5,11 +5,14 @@
 [![ci](https://github.com/denoland/bump-workspaces/actions/workflows/ci.yml/badge.svg)](https://github.com/denoland/bump-workspaces/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/denoland/bump-workspaces/graph/badge.svg?token=KUT5Q1PJE6)](https://codecov.io/gh/denoland/bump-workspaces)
 
-This tool detects necessary version upgrades for workspaces packages using [Conventional Commiets](https://www.conventionalcommits.org/en/v1.0.0/) and creates a PR.
+This tool detects necessary version upgrades for workspaces packages using
+[Conventional Commiets](https://www.conventionalcommits.org/en/v1.0.0/) and
+creates a PR.
 
 # Try it
 
-Run this command with `--dry-run` flag in your Deno workspace-enabled project and see what this command does:
+Run this command with `--dry-run` flag in your Deno workspace-enabled project
+and see what this command does:
 
 ```sh
 deno run -A jsr:@deno/bump-workspaces@0.1.9/cli --dry-run
@@ -19,15 +22,19 @@ deno run -A jsr:@deno/bump-workspaces@0.1.9/cli --dry-run
 
 The below steps describe what this command does:
 
-- Read `deno.json` at the current directory. Read "workspaces". Read `deno.json` of each workspace package.
+- Read `deno.json` at the current directory. Read "workspaces". Read `deno.json`
+  of each workspace package.
 - Collect the git commit messages between the latest tag and the current branch.
-- Calculate the necessary updates for each package. (See the below table for what version upgrades are performed for each conventional commit tag.)
+- Calculate the necessary updates for each package. (See the below table for
+  what version upgrades are performed for each conventional commit tag.)
 - Create and print the release note.
 - Stop here if `--dry-run` specified, and continue if not.
 - Save necessary updates to each `deno.json`.
 - Create a new branch `release-YYYY-MM-DD`
-- Make git commit the version changes using `GIT_USER_NAME` and `GIT_USER_EMAIL` env vars.
-- Create a github pull request using `GITHUB_TOKEN` and `GITHUB_REPOSITORY` env vars.
+- Make git commit the version changes using `GIT_USER_NAME` and `GIT_USER_EMAIL`
+  env vars.
+- Create a github pull request using `GITHUB_TOKEN` and `GITHUB_REPOSITORY` env
+  vars.
 - That's all.
 
 # CI set up
