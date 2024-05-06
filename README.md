@@ -9,9 +9,9 @@ This tool detects necessary version upgrades for workspaces packages using [Conv
 
 # Try it
 
-Runs this command with `--dry-run` flag in your Deno workspace-enabled project and see what this command does:
+Run this command with `--dry-run` flag in your Deno workspace-enabled project and see what this command does:
 
-```
+```sh
 deno run -A jsr:@deno/bump-workspaces@0.1.9/cli --dry-run
 ```
 
