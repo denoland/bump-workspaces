@@ -32,7 +32,7 @@ jobs:
       - name: Run workspaces version bump
         run: |
           git fetch --unshallow origin
-          deno run -A jsr:@deno/bump-workspaces@0.1.6
+          deno run -A jsr:@deno/bump-workspaces@0.1.7
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
 ```
