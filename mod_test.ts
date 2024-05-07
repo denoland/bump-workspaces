@@ -7,6 +7,8 @@ import { join } from "@std/path";
 import { tryGetDenoConfig } from "./util.ts";
 import { assert, assertEquals } from "@std/assert";
 
+// Note: The test cases in this file use git information in the branch `origin/base-branch-for-testing`.
+
 Deno.test("bumpWorkspaces()", async (t) => {
   const dir = await Deno.makeTempDir();
   await copy("testdata/basic", dir, { overwrite: true });
@@ -33,8 +35,8 @@ Deno.test("bumpWorkspaces()", async (t) => {
       "@scope/foo/": "jsr:@scope/foo@^2.0.0/",
       "@scope/bar": "jsr:@scope/bar@^2.3.5",
       "@scope/bar/": "jsr:@scope/bar@^2.3.5/",
-      "@scope/baz": "jsr:@scope/baz@^0.3.0",
-      "@scope/baz/": "jsr:@scope/baz@^0.3.0/",
+      "@scope/baz": "jsr:@scope/baz@^0.2.4",
+      "@scope/baz/": "jsr:@scope/baz@^0.2.4/",
       "@scope/qux": "jsr:@scope/qux@^0.3.5",
       "@scope/qux/": "jsr:@scope/qux@^0.3.5/",
       "@scope/quux": "jsr:@scope/quux@^0.1.0",
@@ -55,7 +57,7 @@ Deno.test("bumpWorkspaces()", async (t) => {
   [_, config] = await tryGetDenoConfig(join(dir, "baz"));
   assertEquals(config, {
     name: "@scope/baz",
-    version: "0.3.0",
+    version: "0.2.4",
   });
   [_, config] = await tryGetDenoConfig(join(dir, "qux"));
   assertEquals(config, {

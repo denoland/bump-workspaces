@@ -339,9 +339,16 @@ export async function applyVersionBump(
   const oldVersionStr = module.version;
   const oldVersion = parseSemVer(oldVersionStr);
   let diff = summary.version;
-  // If the old version is 0.x.y, then breaking change is considered as minor
-  if (diff === "major" && oldVersion.major === 0) {
-    diff = "minor";
+  if (oldVersion.major === 0) {
+    // Change the version bump type for 0.x.y
+    // This is aligned with the spec proposal discussed in https://github.com/semver/semver/pull/923
+    if (diff === "major") {
+      // breaking change is considered as minor in 0.x.y
+      diff = "minor";
+    } else if (diff === "minor") {
+      // new feature is considered as patch in 0.x.y
+      diff = "patch";
+    }
   }
   const newVersion = increment(oldVersion, diff);
   const newVersionStr = formatSemver(newVersion);

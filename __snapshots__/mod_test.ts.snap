@@ -7,7 +7,7 @@ snapshot[`bumpWorkspaces() 1`] = `
 - fix(foo,bar,baz,qux,quux): a fix
 - chore(bar): a chore
 
-#### @scope/baz 0.3.0 (minor) 
+#### @scope/baz 0.2.4 (patch) 
 - feat(baz): add a feature
 - fix(foo,bar,baz,qux,quux): a fix
 
