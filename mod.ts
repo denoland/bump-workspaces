@@ -6,6 +6,23 @@ import { cyan, magenta } from "@std/fmt/colors";
 import { ensureFile } from "@std/fs/ensure-file";
 import { join } from "@std/path/join";
 
+/**
+ * Upgrade the versions of the packages in the workspaces using Conventional Commits rules.
+ *
+ * The workflow of this function is:
+ * - Read workspaces info from the deno.json in the given `root`.
+ * - Read commit messages between the given `start` and `base`.
+ *   - `start` defaults to the latest tag in the current branch (=`git describe --tags --abbrev=0`)
+ *   - `base` defaults to the current branch (=`git branch --show-current`)
+ * - Detect necessary version updates from the commit messages.
+ * - Update the versions in the deno.json files.
+ * - Create a release note.
+ * - Create a git commit with given `gitUserName` and `gitUserEmail`.
+ * - Create a pull request, targeting the given `base` branch.
+ *
+ * @module
+ */
+
 import {
   applyVersionBump,
   checkModuleName,
@@ -52,7 +69,7 @@ export type BumpWorkspaceOptions = {
 };
 
 /**
- * Bump the versions of the modules in the workspaces.
+ * Upgrade the versions of the packages in the workspaces using Conventional Commits rules.
  *
  * The workflow of this function is:
  * - Read workspaces info from the deno.json in the given `root`.
