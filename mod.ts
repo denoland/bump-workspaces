@@ -6,23 +6,6 @@ import { cyan, magenta } from "@std/fmt/colors";
 import { ensureFile } from "@std/fs/ensure-file";
 import { join } from "@std/path/join";
 
-/**
- * Bump the versions of the modules in the workspaces.
- *
- * The workflow of this function is:
- * - Read workspaces info from the deno.json in the given `root`.
- * - Read commit messages between the given `start` and `base`.
- *   - `start` defaults to the latest tag in the current branch (=`git describe --tags --abbrev=0`)
- *   - `base` defaults to the current branch (=`git branch --show-current`)
- * - Detect necessary version updates from the commit messages.
- * - Update the versions in the deno.json files.
- * - Create a release note.
- * - Create a git commit with given `gitUserName` and `gitUserEmail`.
- * - Create a pull request, targeting the given `base` branch.
- *
- * @module
- */
-
 import {
   applyVersionBump,
   checkModuleName,
@@ -97,7 +80,7 @@ export async function bumpWorkspaces(
   }: BumpWorkspaceOptions = {},
 ) {
   const now = new Date();
-  const modules = await getWorkspaceModules(root);
+  const [configPath, modules] = await getWorkspaceModules(root);
   start ??= await $`git describe --tags --abbrev=0`.text();
   const newBranchName = createReleaseBranchName(now);
   base ??= await $`git branch --show-current`.text();
@@ -161,13 +144,16 @@ export async function bumpWorkspaces(
 
   console.log(`Updating the versions:`);
   const updates: Record<string, VersionUpdateResult> = {};
+  let denoJson = await Deno.readTextFile(configPath);
   for (const summary of summaries) {
     const module = getModule(summary.module, modules)!;
-    const versionUpdate = await applyVersionBump(
+    const [denoJson_, versionUpdate] = await applyVersionBump(
       summary,
       module,
+      denoJson,
       dryRun === true,
     );
+    denoJson = denoJson_;
     updates[module.name] = versionUpdate;
   }
   console.table(updates, ["diff", "from", "to", "path"]);
@@ -188,6 +174,9 @@ export async function bumpWorkspaces(
     console.log(cyan("Skip making a commit."));
     console.log(cyan("Skip making a pull request."));
   } else {
+    // Updates deno.json
+    await Deno.writeTextFile(configPath, denoJson);
+
     // Prepend release notes
     await ensureFile(releaseNotePath);
     await Deno.writeTextFile(
