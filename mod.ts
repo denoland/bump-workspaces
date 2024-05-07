@@ -70,8 +70,8 @@ export async function bumpWorkspaces(
     parseCommitMessage = defaultParseCommitMessage,
     start,
     base,
-    gitUserName = "denobot",
-    gitUserEmail = "33910674+denobot@users.noreply.github.com",
+    gitUserName,
+    gitUserEmail,
     githubToken,
     githubRepo,
     dryRun = false,
@@ -197,6 +197,27 @@ export async function bumpWorkspaces(
     );
 
     if (dryRun === false) {
+      gitUserName ??= Deno.env.get("GIT_USER_NAME");
+      if (gitUserName === undefined) {
+        console.error("GIT_USER_NAME is not set.");
+        Deno.exit(1);
+      }
+      gitUserEmail ??= Deno.env.get("GIT_USER_EMAIL");
+      if (gitUserEmail === undefined) {
+        console.error("GIT_USER_EMAIL is not set.");
+        Deno.exit(1);
+      }
+      githubToken ??= Deno.env.get("GITHUB_TOKEN");
+      if (githubToken === undefined) {
+        console.error("GITHUB_TOKEN is not set.");
+        Deno.exit(1);
+      }
+      githubRepo ??= Deno.env.get("GITHUB_REPOSITORY");
+      if (githubRepo === undefined) {
+        console.error("GITHUB_REPOSITORY is not set.");
+        Deno.exit(1);
+      }
+
       // Makes a commit
       console.log(
         `Creating a git commit in the new branch ${magenta(newBranchName)}.`,
@@ -210,17 +231,7 @@ export async function bumpWorkspaces(
 
       // Makes a PR
       console.log(`Creating a pull request.`);
-      githubToken ??= Deno.env.get("GITHUB_TOKEN");
-      if (githubToken === undefined) {
-        console.error("GITHUB_TOKEN is not set.");
-        Deno.exit(1);
-      }
       const octoKit = new Octokit({ auth: githubToken });
-      githubRepo ??= Deno.env.get("GITHUB_REPOSITORY");
-      if (githubRepo === undefined) {
-        console.error("GITHUB_REPOSITORY is not set.");
-        Deno.exit(1);
-      }
       const [owner, repo] = githubRepo.split("/");
       const openedPr = await octoKit.request(
         "POST /repos/{owner}/{repo}/pulls",
