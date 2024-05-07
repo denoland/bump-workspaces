@@ -336,14 +336,24 @@ export async function applyVersionBump(
       path: module[pathProp],
     }];
   }
-  const oldVersionStr = module.version;
-  const oldVersion = parseSemVer(oldVersionStr);
+  const currentVersionStr = module.version;
+  const currentVersion = parseSemVer(currentVersionStr);
   let diff = summary.version;
-  // If the old version is 0.x.y, then breaking change is considered as minor
-  if (diff === "major" && oldVersion.major === 0) {
-    diff = "minor";
+  if (currentVersion.prerelease && currentVersion.prerelease.length > 0) {
+    // If the current version is a prerelease version, the version bump type is always prerelease
+    diff = "prerelease";
+  } else if (currentVersion.major === 0) {
+    // Change the version bump type for 0.x.y
+    // This is aligned with the spec proposal discussed in https://github.com/semver/semver/pull/923
+    if (diff === "major") {
+      // breaking change is considered as minor in 0.x.y
+      diff = "minor";
+    } else if (diff === "minor") {
+      // new feature is considered as patch in 0.x.y
+      diff = "patch";
+    }
   }
-  const newVersion = increment(oldVersion, diff);
+  const newVersion = increment(currentVersion, diff);
   const newVersionStr = formatSemver(newVersion);
   module.version = newVersionStr;
   const path = module[pathProp];
@@ -351,7 +361,7 @@ export async function applyVersionBump(
     await Deno.writeTextFile(path, JSON.stringify(module, null, 2) + "\n");
   }
   denoJson = denoJson.replace(
-    new RegExp(`${module.name}@([^~]?)${oldVersionStr}`, "g"),
+    new RegExp(`${module.name}@([^~]?)${currentVersionStr}`, "g"),
     `${module.name}@$1${newVersionStr}`,
   );
   if (path.endsWith("deno.jsonc")) {
@@ -360,7 +370,7 @@ export async function applyVersionBump(
     );
   }
   return [denoJson, {
-    from: oldVersionStr,
+    from: currentVersionStr,
     to: newVersionStr,
     diff,
     summary,

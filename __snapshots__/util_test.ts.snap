@@ -372,7 +372,7 @@ snapshot[`getWorkspaceModules() 1`] = `
 snapshot[`createReleaseNote() 1`] = `
 "### 1970.01.01
 
-#### @std/collections 0.214.0 (minor) 
+#### @std/collections 0.213.1 (patch) 
 - feat(collections): pass \`key\` to \`mapValues()\` transformer (#4127)
 
 #### @std/console 0.213.1 (patch) 
@@ -446,7 +446,7 @@ snapshot[`createPrBody() 1`] = `
 
 | module   | from    | to      | type  |
 |----------|---------|---------|-------|
-|collections|0.213.0|0.214.0|minor|
+|collections|0.213.0|0.213.1|patch|
 |console|0.213.0|0.213.1|patch|
 |crypto|0.213.0|0.213.1|patch|
 |expect|0.213.0|0.213.1|patch|

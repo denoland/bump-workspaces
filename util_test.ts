@@ -692,9 +692,7 @@ Deno.test("applyVersionBump() updates the version of the given module", async ()
     `{
       "imports": {
         "scope/foo": "jsr:@scope/foo@^1.0.0",
-        "scope/foo/": "jsr:@scope/foo@^1.0.0/",
-        "scope/bar": "jsr:@scope/bar@^1.0.0",
-        "scope/bar/": "jsr:@scope/bar@^1.0.0/"
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
       }
     }`,
     true,
@@ -707,9 +705,7 @@ Deno.test("applyVersionBump() updates the version of the given module", async ()
     `{
       "imports": {
         "scope/foo": "jsr:@scope/foo@^1.1.0",
-        "scope/foo/": "jsr:@scope/foo@^1.1.0/",
-        "scope/bar": "jsr:@scope/bar@^1.0.0",
-        "scope/bar/": "jsr:@scope/bar@^1.0.0/"
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
       }
     }`,
   );
@@ -727,9 +723,7 @@ Deno.test("applyVersionBump() consider major bump for 0.x version as minor bump"
     `{
       "imports": {
         "scope/foo": "jsr:@scope/foo@^0.0.0",
-        "scope/foo/": "jsr:@scope/foo@^0.0.0/",
-        "scope/bar": "jsr:@scope/bar@^1.0.0",
-        "scope/bar/": "jsr:@scope/bar@^1.0.0/"
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
       }
     }`,
     true,
@@ -742,9 +736,69 @@ Deno.test("applyVersionBump() consider major bump for 0.x version as minor bump"
     `{
       "imports": {
         "scope/foo": "jsr:@scope/foo@^0.1.0",
-        "scope/foo/": "jsr:@scope/foo@^0.1.0/",
-        "scope/bar": "jsr:@scope/bar@^1.0.0",
-        "scope/bar/": "jsr:@scope/bar@^1.0.0/"
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
+      }
+    }`,
+  );
+});
+
+Deno.test("applyVersionBump() consider minor bump for 0.x version as patch bump", async () => {
+  const [denoJson, updateResult] = await applyVersionBump(
+    {
+      module: "foo",
+      version: "minor",
+      commits: [],
+    },
+    { name: "@scope/foo", version: "0.1.0", [pathProp]: "foo/deno.jsonc" },
+    { name: "@scope/foo", version: "0.1.0", [pathProp]: "foo/deno.jsonc" },
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^0.1.0",
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
+      }
+    }`,
+    true,
+  );
+  assertEquals(updateResult.from, "0.1.0");
+  assertEquals(updateResult.to, "0.1.1");
+  assertEquals(updateResult.diff, "patch");
+  assertEquals(
+    denoJson,
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^0.1.1",
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
+      }
+    }`,
+  );
+});
+
+Deno.test("applyVersionBump() consider any change to prerelease version as prerelease bump", async () => {
+  const [denoJson, updateResult] = await applyVersionBump(
+    {
+      module: "foo",
+      version: "minor",
+      commits: [],
+    },
+    { name: "@scope/foo", version: "1.0.0-rc.1", [pathProp]: "foo/deno.jsonc" },
+    { name: "@scope/foo", version: "1.0.0-rc.1", [pathProp]: "foo/deno.jsonc" },
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^1.0.0-rc.1",
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
+      }
+    }`,
+    true,
+  );
+  assertEquals(updateResult.from, "1.0.0-rc.1");
+  assertEquals(updateResult.to, "1.0.0-rc.2");
+  assertEquals(updateResult.diff, "prerelease");
+  assertEquals(
+    denoJson,
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^1.0.0-rc.2",
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
       }
     }`,
   );
@@ -793,9 +847,7 @@ Deno.test("applyVersionBump() works for new module (the case when oldModule is u
     `{
       "imports": {
         "scope/foo": "jsr:@scope/foo@^0.1.0",
-        "scope/foo/": "jsr:@scope/foo@^0.1.0/",
-        "scope/bar": "jsr:@scope/bar@^1.0.0",
-        "scope/bar/": "jsr:@scope/bar@^1.0.0/"
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
       }
     }`,
     true,
@@ -808,9 +860,7 @@ Deno.test("applyVersionBump() works for new module (the case when oldModule is u
     `{
       "imports": {
         "scope/foo": "jsr:@scope/foo@^0.1.0",
-        "scope/foo/": "jsr:@scope/foo@^0.1.0/",
-        "scope/bar": "jsr:@scope/bar@^1.0.0",
-        "scope/bar/": "jsr:@scope/bar@^1.0.0/"
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
       }
     }`,
   );
