@@ -339,7 +339,10 @@ export async function applyVersionBump(
   const currentVersionStr = module.version;
   const currentVersion = parseSemVer(currentVersionStr);
   let diff = summary.version;
-  if (currentVersion.major === 0) {
+  if (currentVersion.prerelease && currentVersion.prerelease.length > 0) {
+    // If the current version is a prerelease version, the version bump type is always prerelease
+    diff = "prerelease";
+  } else if (currentVersion.major === 0) {
     // Change the version bump type for 0.x.y
     // This is aligned with the spec proposal discussed in https://github.com/semver/semver/pull/923
     if (diff === "major") {

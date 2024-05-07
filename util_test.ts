@@ -773,6 +773,37 @@ Deno.test("applyVersionBump() consider minor bump for 0.x version as patch bump"
   );
 });
 
+Deno.test("applyVersionBump() consider any change to prerelease version as prerelease bump", async () => {
+  const [denoJson, updateResult] = await applyVersionBump(
+    {
+      module: "foo",
+      version: "minor",
+      commits: [],
+    },
+    { name: "@scope/foo", version: "1.0.0-rc.1", [pathProp]: "foo/deno.jsonc" },
+    { name: "@scope/foo", version: "1.0.0-rc.1", [pathProp]: "foo/deno.jsonc" },
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^1.0.0-rc.1",
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
+      }
+    }`,
+    true,
+  );
+  assertEquals(updateResult.from, "1.0.0-rc.1");
+  assertEquals(updateResult.to, "1.0.0-rc.2");
+  assertEquals(updateResult.diff, "prerelease");
+  assertEquals(
+    denoJson,
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^1.0.0-rc.2",
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
+      }
+    }`,
+  );
+});
+
 Deno.test("applyVersionBump() respect manual version upgrade if the version between start and base is different", async () => {
   const [denoJson, updateResult] = await applyVersionBump(
     {
