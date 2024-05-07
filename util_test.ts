@@ -688,6 +688,7 @@ Deno.test("applyVersionBump() updates the version of the given module", async ()
       commits: [],
     },
     { name: "@scope/foo", version: "1.0.0", [pathProp]: "foo/deno.json" },
+    { name: "@scope/foo", version: "1.0.0", [pathProp]: "foo/deno.json" },
     `{
       "imports": {
         "scope/foo": "jsr:@scope/foo@^1.0.0",
@@ -721,6 +722,7 @@ Deno.test("applyVersionBump() consider major bump for 0.x version as minor bump"
       version: "major",
       commits: [],
     },
+    { name: "@scope/foo", version: "0.0.0", [pathProp]: "foo/deno.jsonc" },
     { name: "@scope/foo", version: "0.0.0", [pathProp]: "foo/deno.jsonc" },
     `{
       "imports": {
@@ -762,6 +764,7 @@ async function createVersionUpdateResults(
   for (const summary of summaries) {
     const [_denoJson, versionUpdate] = await applyVersionBump(
       summary,
+      getModule(summary.module, modules)!,
       getModule(summary.module, modules)!,
       "",
       true,

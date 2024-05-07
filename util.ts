@@ -8,8 +8,9 @@ import {
   increment,
   parse as parseSemVer,
 } from "@std/semver";
+import { red } from "@std/fmt/colors";
 
-export type VersionUpdate = "major" | "minor" | "patch";
+export type VersionUpdate = "major" | "minor" | "patch" | "prerelease";
 
 export type Commit = {
   subject: string;
@@ -234,7 +235,7 @@ export async function getWorkspaceModules(
   const workspaces = denoConfig.workspaces;
 
   if (!Array.isArray(workspaces)) {
-    console.log("deno.json doesn't have workspaces field.");
+    console.log(red("Error") + " deno.json doesn't have workspaces field.");
     Deno.exit(1);
   }
 
@@ -277,13 +278,64 @@ export function checkModuleName(
   };
 }
 
+export function calcVersionDiff(
+  newVersionStr: string,
+  oldVersionStr: string,
+): VersionUpdate {
+  const newVersion = parseSemVer(newVersionStr);
+  const oldVersion = parseSemVer(oldVersionStr);
+  if (newVersion.prerelease && newVersion.prerelease.length > 0) {
+    return "prerelease";
+  } else if (newVersion.major !== oldVersion.major) {
+    return "major";
+  } else if (newVersion.minor !== oldVersion.minor) {
+    return "minor";
+  } else if (newVersion.patch !== oldVersion.patch) {
+    return "patch";
+  } else {
+    throw new Error(
+      `Unexpected manual version update: ${oldVersion} -> ${newVersion}`,
+    );
+  }
+}
+
 /** Apply the version bump to the file system. */
 export async function applyVersionBump(
   summary: VersionBumpSummary,
   module: WorkspaceModule,
+  oldModule: WorkspaceModule | undefined,
   denoJson: string,
   dryRun = false,
 ): Promise<[denoJson: string, VersionUpdateResult]> {
+  if (!oldModule) {
+    // The module is newly added
+    console.info(`New module ${module.name} detected.`);
+    const diff = calcVersionDiff(module.version, "0.0.0");
+    summary.version = diff;
+    return [denoJson, {
+      from: "0.0.0",
+      to: module.version,
+      diff,
+      summary,
+      path: module[pathProp],
+    }];
+  }
+  if (oldModule.version !== module.version) {
+    // The version is manually updated
+    console.info(
+      `Manaul version update detected for ${module.name}: ${oldModule.version} -> ${module.version}`,
+    );
+
+    const diff = calcVersionDiff(module.version, oldModule.version);
+    summary.version = diff;
+    return [denoJson, {
+      from: oldModule.version,
+      to: module.version,
+      diff,
+      summary,
+      path: module[pathProp],
+    }];
+  }
   const oldVersionStr = module.version;
   const oldVersion = parseSemVer(oldVersionStr);
   let diff = summary.version;

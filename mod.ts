@@ -80,18 +80,25 @@ export async function bumpWorkspaces(
   }: BumpWorkspaceOptions = {},
 ) {
   const now = new Date();
-  const [configPath, modules] = await getWorkspaceModules(root);
   start ??= await $`git describe --tags --abbrev=0`.text();
-  const newBranchName = createReleaseBranchName(now);
   base ??= await $`git branch --show-current`.text();
   if (!base) {
     console.error("The current branch is not found.");
     Deno.exit(1);
   }
+
+  await $`git checkout ${start}`;
+  const [_oldConfigPath, oldModules] = await getWorkspaceModules(root);
+  await $`git checkout ${base}`;
+  const [configPath, modules] = await getWorkspaceModules(root);
+
+  const newBranchName = createReleaseBranchName(now);
   releaseNotePath = join(root, releaseNotePath);
+
   const text =
     await $`git --no-pager log --pretty=format:${separator}%H%B ${start}..${base}`
       .text();
+
   const commits = text.split(separator).map((commit) => {
     const hash = commit.slice(0, 40);
     commit = commit.slice(40);
@@ -103,7 +110,8 @@ export async function bumpWorkspaces(
     const body = commit.slice(i + 1).trim();
     return { hash, subject, body };
   });
-  commits.shift();
+  commits.shift(); // drop the first empty item
+
   console.log(
     `Found ${cyan(commits.length.toString())} commits between ${
       magenta(start)
@@ -147,9 +155,11 @@ export async function bumpWorkspaces(
   let denoJson = await Deno.readTextFile(configPath);
   for (const summary of summaries) {
     const module = getModule(summary.module, modules)!;
+    const oldModule = getModule(summary.module, oldModules);
     const [denoJson_, versionUpdate] = await applyVersionBump(
       summary,
       module,
+      oldModule,
       denoJson,
       dryRun === true,
     );
