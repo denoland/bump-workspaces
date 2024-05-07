@@ -9,6 +9,7 @@ import { assert, assertEquals } from "@std/assert";
 import { $ } from "@david/dax";
 
 const currentRef = await $`git branch --show-current`.text();
+console.log("currentRef", currentRef);
 
 Deno.test("bumpWorkspaces()", async (t) => {
   try {
