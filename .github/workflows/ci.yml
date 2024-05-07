@@ -13,7 +13,8 @@ jobs:
       - uses: denoland/setup-deno@v1
       - run: deno fmt --check
       - run: deno lint
-      - run: |
+      - name: Test
+        run: |
           git fetch origin # some branches are necessary for testing
           deno task cov
       - uses: codecov/codecov-action@v4

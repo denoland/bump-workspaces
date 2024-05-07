@@ -89,8 +89,10 @@ export async function bumpWorkspaces(
 
   await $`git checkout ${start}`;
   const [_oldConfigPath, oldModules] = await getWorkspaceModules(root);
+  await $`git checkout -`;
   await $`git checkout ${base}`;
   const [configPath, modules] = await getWorkspaceModules(root);
+  await $`git checkout -`;
 
   const newBranchName = createReleaseBranchName(now);
   releaseNotePath = join(root, releaseNotePath);
