@@ -688,6 +688,7 @@ Deno.test("applyVersionBump() updates the version of the given module", async ()
       commits: [],
     },
     { name: "@scope/foo", version: "1.0.0", [pathProp]: "foo/deno.json" },
+    { name: "@scope/foo", version: "1.0.0", [pathProp]: "foo/deno.json" },
     `{
       "imports": {
         "scope/foo": "jsr:@scope/foo@^1.0.0",
@@ -722,10 +723,77 @@ Deno.test("applyVersionBump() consider major bump for 0.x version as minor bump"
       commits: [],
     },
     { name: "@scope/foo", version: "0.0.0", [pathProp]: "foo/deno.jsonc" },
+    { name: "@scope/foo", version: "0.0.0", [pathProp]: "foo/deno.jsonc" },
     `{
       "imports": {
         "scope/foo": "jsr:@scope/foo@^0.0.0",
         "scope/foo/": "jsr:@scope/foo@^0.0.0/",
+        "scope/bar": "jsr:@scope/bar@^1.0.0",
+        "scope/bar/": "jsr:@scope/bar@^1.0.0/"
+      }
+    }`,
+    true,
+  );
+  assertEquals(updateResult.from, "0.0.0");
+  assertEquals(updateResult.to, "0.1.0");
+  assertEquals(updateResult.diff, "minor");
+  assertEquals(
+    denoJson,
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^0.1.0",
+        "scope/foo/": "jsr:@scope/foo@^0.1.0/",
+        "scope/bar": "jsr:@scope/bar@^1.0.0",
+        "scope/bar/": "jsr:@scope/bar@^1.0.0/"
+      }
+    }`,
+  );
+});
+
+Deno.test("applyVersionBump() respect manual version upgrade if the version between start and base is different", async () => {
+  const [denoJson, updateResult] = await applyVersionBump(
+    {
+      module: "foo",
+      version: "minor", // This version is ignored, instead manually given version is used for calculating actual version diff
+      commits: [],
+    },
+    { name: "@scope/foo", version: "1.0.0-rc.1", [pathProp]: "foo/deno.jsonc" },
+    { name: "@scope/foo", version: "0.224.0", [pathProp]: "foo/deno.jsonc" },
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^1.0.0-rc.1",
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
+      }
+    }`,
+    true,
+  );
+  assertEquals(updateResult.from, "0.224.0");
+  assertEquals(updateResult.to, "1.0.0-rc.1");
+  assertEquals(updateResult.diff, "prerelease");
+  assertEquals(
+    denoJson,
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^1.0.0-rc.1",
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
+      }
+    }`,
+  );
+});
+
+Deno.test("applyVersionBump() works for new module (the case when oldModule is undefined)", async () => {
+  const [denoJson, updateResult] = await applyVersionBump(
+    {
+      module: "foo",
+      version: "patch", // <= this version is ignored, instead manually given version is used for calculating actual version diff
+      commits: [],
+    },
+    { name: "@scope/foo", version: "0.1.0", [pathProp]: "foo/deno.jsonc" },
+    undefined,
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^0.1.0",
+        "scope/foo/": "jsr:@scope/foo@^0.1.0/",
         "scope/bar": "jsr:@scope/bar@^1.0.0",
         "scope/bar/": "jsr:@scope/bar@^1.0.0/"
       }
@@ -762,6 +830,7 @@ async function createVersionUpdateResults(
   for (const summary of summaries) {
     const [_denoJson, versionUpdate] = await applyVersionBump(
       summary,
+      getModule(summary.module, modules)!,
       getModule(summary.module, modules)!,
       "",
       true,
