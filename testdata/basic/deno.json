@@ -1,4 +1,16 @@
 {
+  "imports": {
+    "@scope/foo": "jsr:@scope/foo@^1.2.3",
+    "@scope/foo/": "jsr:@scope/foo@^1.2.3/",
+    "@scope/bar": "jsr:@scope/bar@^2.3.4",
+    "@scope/bar/": "jsr:@scope/bar@^2.3.4/",
+    "@scope/baz": "jsr:@scope/baz@^0.2.3",
+    "@scope/baz/": "jsr:@scope/baz@^0.2.3/",
+    "@scope/qux": "jsr:@scope/qux@^0.3.4",
+    "@scope/qux/": "jsr:@scope/qux@^0.3.4/",
+    "@scope/quux": "jsr:@scope/quux@^0.0.0",
+    "@scope/quux/": "jsr:@scope/quux@^0.0.0/"
+  },
   "workspaces": [
     "./foo",
     "./bar",

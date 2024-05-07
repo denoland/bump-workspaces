@@ -298,6 +298,10 @@ export async function applyVersionBump(
   if (!dryRun) {
     await Deno.writeTextFile(path, JSON.stringify(module, null, 2) + "\n");
   }
+  denoJson = denoJson.replace(
+    new RegExp(`${module.name}@([^~]?)${oldVersionStr}`, "g"),
+    `${module.name}@$1${newVersionStr}`,
+  );
   if (path.endsWith("deno.jsonc")) {
     console.warn(
       `Currently this tool doesn't keep the comments in deno.jsonc files. Comments in the path "${path}" might be removed by this update.`,

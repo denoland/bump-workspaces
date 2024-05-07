@@ -688,7 +688,14 @@ Deno.test("applyVersionBump() updates the version of the given module", async ()
       commits: [],
     },
     { name: "@scope/foo", version: "1.0.0", [pathProp]: "foo/deno.json" },
-    `{}`,
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^1.0.0",
+        "scope/foo/": "jsr:@scope/foo@^1.0.0/",
+        "scope/bar": "jsr:@scope/bar@^1.0.0",
+        "scope/bar/": "jsr:@scope/bar@^1.0.0/"
+      }
+    }`,
     true,
   );
   assertEquals(versionUpdate.from, "1.0.0");
@@ -696,7 +703,14 @@ Deno.test("applyVersionBump() updates the version of the given module", async ()
   assertEquals(versionUpdate.diff, "minor");
   assertEquals(
     denoJson,
-    `{}`,
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^1.1.0",
+        "scope/foo/": "jsr:@scope/foo@^1.1.0/",
+        "scope/bar": "jsr:@scope/bar@^1.0.0",
+        "scope/bar/": "jsr:@scope/bar@^1.0.0/"
+      }
+    }`,
   );
 });
 
@@ -708,7 +722,14 @@ Deno.test("applyVersionBump() consider major bump for 0.x version as minor bump"
       commits: [],
     },
     { name: "@scope/foo", version: "0.0.0", [pathProp]: "foo/deno.jsonc" },
-    `{}`,
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^0.0.0",
+        "scope/foo/": "jsr:@scope/foo@^0.0.0/",
+        "scope/bar": "jsr:@scope/bar@^1.0.0",
+        "scope/bar/": "jsr:@scope/bar@^1.0.0/"
+      }
+    }`,
     true,
   );
   assertEquals(updateResult.from, "0.0.0");
@@ -716,7 +737,14 @@ Deno.test("applyVersionBump() consider major bump for 0.x version as minor bump"
   assertEquals(updateResult.diff, "minor");
   assertEquals(
     denoJson,
-    `{}`,
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^0.1.0",
+        "scope/foo/": "jsr:@scope/foo@^0.1.0/",
+        "scope/bar": "jsr:@scope/bar@^1.0.0",
+        "scope/bar/": "jsr:@scope/bar@^1.0.0/"
+      }
+    }`,
   );
 });
 
