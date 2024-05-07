@@ -3,31 +3,35 @@ export const snapshot = {};
 snapshot[`bumpWorkspaces() 1`] = `
 "### YYYY.MM.DD
 
-#### @scope/bar 2.3.5 (patch) 
+#### @scope/bar 2.3.5 (patch)
+
 - fix(foo,bar,baz,qux,quux): a fix
 - chore(bar): a chore
 
-#### @scope/baz 0.2.4 (patch) 
+#### @scope/baz 0.2.4 (patch)
+
 - feat(baz): add a feature
 - fix(foo,bar,baz,qux,quux): a fix
 
-#### @scope/foo 2.0.0 (major) 
+#### @scope/foo 2.0.0 (major)
+
 - BREAKING(foo): a breaking change
 - deprecation(foo): a deprecation
 - fix(foo,bar,baz,qux,quux): a fix
 - docs(foo): add docs
 
-#### @scope/quux 0.1.0 (minor) 
+#### @scope/quux 0.1.0 (minor)
+
 - BREAKING(quux): a breaking change
 - fix(foo,bar,baz,qux,quux): a fix
 - style(qux,quux): style update
 - test(quux): add a test
 
-#### @scope/qux 0.3.5 (patch) 
+#### @scope/qux 0.3.5 (patch)
+
 - fix(foo,bar,baz,qux,quux): a fix
 - perf(qux): a perf improvement
 - style(qux,quux): style update
 - chore(qux): a chore
-
 "
 `;

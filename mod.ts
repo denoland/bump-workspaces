@@ -261,7 +261,12 @@ export async function bumpWorkspaces(
           head: newBranchName,
           draft: true,
           title: `Release ${createReleaseTitle(now)}`,
-          body: createPrBody(Object.values(updates), diagnostics, githubRepo),
+          body: createPrBody(
+            Object.values(updates),
+            diagnostics,
+            githubRepo,
+            newBranchName,
+          ),
         },
       );
       console.log("New pull request:", cyan(openedPr.data.html_url));
