@@ -213,6 +213,8 @@ export async function bumpWorkspaces(
       releaseNote + "\n" + await Deno.readTextFile(releaseNotePath),
     );
 
+    await $`deno fmt ${releaseNotePath}`;
+
     if (dryRun === false) {
       gitUserName ??= Deno.env.get("GIT_USER_NAME");
       if (gitUserName === undefined) {

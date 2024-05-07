@@ -353,6 +353,7 @@ export async function applyVersionBump(
       diff = "patch";
     }
   }
+  summary.version = diff;
   const newVersion = increment(currentVersion, diff);
   const newVersionStr = formatSemver(newVersion);
   module.version = newVersionStr;
