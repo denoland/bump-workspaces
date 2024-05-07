@@ -396,6 +396,7 @@ export function createPrBody(
   updates: VersionUpdateResult[],
   diagnostics: Diagnostic[],
   githubRepo: string,
+  releaseBranch: string,
 ) {
   const table = updates.map((u) =>
     "|" + [u.summary.module, u.from, u.to, u.diff].join("|") + "|"
@@ -440,7 +441,7 @@ ${ignoredCommitsNotes}
 To make edits to this PR:
 
 \`\`\`sh
-git fetch upstream release_0_213.0 && git checkout -b release_0_213.0 upstream/release_0_213.0
+git fetch upstream ${releaseBranch} && git checkout -b ${releaseBranch} upstream/${releaseBranch}
 \`\`\`
 `;
   function createDiagnosticsNotes(

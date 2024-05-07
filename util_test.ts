@@ -907,7 +907,12 @@ Deno.test("createPrBody()", async (t) => {
   );
   await assertSnapshot(
     t,
-    createPrBody(updates, diagnostics, "denoland/deno_std"),
+    createPrBody(
+      updates,
+      diagnostics,
+      "denoland/deno_std",
+      "release-1970-01-01-00-00-00",
+    ),
   );
 });
 

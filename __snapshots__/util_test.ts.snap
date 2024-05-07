@@ -483,7 +483,7 @@ The following commits have unknown scopes. Please handle them manually if necess
 To make edits to this PR:
 
 \`\`\`sh
-git fetch upstream release_0_213.0 && git checkout -b release_0_213.0 upstream/release_0_213.0
+git fetch upstream release-1970-01-01-00-00-00 && git checkout -b release-1970-01-01-00-00-00 upstream/release-1970-01-01-00-00-00
 \`\`\`
 "
 `;
