@@ -260,7 +260,7 @@ export async function bumpWorkspaces(
           base: base,
           head: newBranchName,
           draft: true,
-          title: `Release ${createReleaseTitle(now)}`,
+          title: `chore: release ${createReleaseTitle(now)}`,
           body: createPrBody(
             Object.values(updates),
             diagnostics,
