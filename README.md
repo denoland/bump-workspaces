@@ -15,7 +15,7 @@ Run this command with `--dry-run` flag in your Deno workspace-enabled project
 and see what this command does:
 
 ```sh
-deno run -A jsr:@deno/bump-workspaces@0.1.14/cli --dry-run
+deno run -A jsr:@deno/bump-workspaces@0.1.15/cli --dry-run
 ```
 
 # How it works
@@ -68,7 +68,7 @@ jobs:
       - name: Run workspaces version bump
         run: |
           git fetch --unshallow origin
-          deno run -A jsr:@deno/bump-workspaces@0.1.14/cli
+          deno run -A jsr:@deno/bump-workspaces@0.1.15/cli
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
 ```
