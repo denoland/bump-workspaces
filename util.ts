@@ -7,6 +7,7 @@ import {
   format as formatSemver,
   increment,
   parse as parseSemVer,
+  type SemVer,
 } from "@std/semver";
 import { red } from "@std/fmt/colors";
 
@@ -278,13 +279,17 @@ export function checkModuleName(
   };
 }
 
+function hasPrerelease(version: SemVer) {
+  return version.prerelease !== undefined && version.prerelease.length > 0;
+}
+
 export function calcVersionDiff(
   newVersionStr: string,
   oldVersionStr: string,
 ): VersionUpdate {
   const newVersion = parseSemVer(newVersionStr);
   const oldVersion = parseSemVer(oldVersionStr);
-  if (newVersion.prerelease && newVersion.prerelease.length > 0) {
+  if (hasPrerelease(newVersion)) {
     return "prerelease";
   } else if (newVersion.major !== oldVersion.major) {
     return "major";
@@ -292,11 +297,25 @@ export function calcVersionDiff(
     return "minor";
   } else if (newVersion.patch !== oldVersion.patch) {
     return "patch";
-  } else {
-    throw new Error(
-      `Unexpected manual version update: ${oldVersion} -> ${newVersion}`,
-    );
+  } else if (
+    hasPrerelease(oldVersion) && !hasPrerelease(newVersion) &&
+    newVersion.major === oldVersion.major &&
+    newVersion.minor === oldVersion.minor &&
+    newVersion.patch === oldVersion.patch
+  ) {
+    // The prerelease version is removed like
+    // 1.0.0-rc.1 -> 1.0.0
+    if (newVersion.patch !== 0) {
+      return "patch";
+    } else if (newVersion.minor !== 0) {
+      return "minor";
+    } else if (newVersion.major !== 0) {
+      return "major";
+    }
   }
+  throw new Error(
+    `Unexpected manual version update: ${oldVersion} -> ${newVersion}`,
+  );
 }
 
 /** Apply the version bump to the file system. */

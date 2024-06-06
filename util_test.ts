@@ -835,6 +835,37 @@ Deno.test("applyVersionBump() respect manual version upgrade if the version betw
   );
 });
 
+Deno.test("applyVersionBump() respect manual version upgrade if the version between start and base is different (the case prerelease is removed)", async () => {
+  const [denoJson, updateResult] = await applyVersionBump(
+    {
+      module: "foo",
+      version: "patch", // This version is ignored, instead manually given version is used for calculating actual version diff
+      commits: [],
+    },
+    { name: "@scope/foo", version: "1.0.0", [pathProp]: "foo/deno.jsonc" },
+    { name: "@scope/foo", version: "1.0.0-rc.1", [pathProp]: "foo/deno.jsonc" },
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^1.0.0",
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
+      }
+    }`,
+    true,
+  );
+  assertEquals(updateResult.from, "1.0.0-rc.1");
+  assertEquals(updateResult.to, "1.0.0");
+  assertEquals(updateResult.diff, "major");
+  assertEquals(
+    denoJson,
+    `{
+      "imports": {
+        "scope/foo": "jsr:@scope/foo@^1.0.0",
+        "scope/bar": "jsr:@scope/bar@^1.0.0"
+      }
+    }`,
+  );
+});
+
 Deno.test("applyVersionBump() works for new module (the case when oldModule is undefined)", async () => {
   const [denoJson, updateResult] = await applyVersionBump(
     {
