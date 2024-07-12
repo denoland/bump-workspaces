@@ -7,10 +7,10 @@ import { ensureFile } from "@std/fs/ensure-file";
 import { join } from "@std/path/join";
 
 /**
- * Upgrade the versions of the packages in the workspaces using Conventional Commits rules.
+ * Upgrade the versions of the packages in the workspace using Conventional Commits rules.
  *
  * The workflow of this function is:
- * - Read workspaces info from the deno.json in the given `root`.
+ * - Read workspace info from the deno.json in the given `root`.
  * - Read commit messages between the given `start` and `base`.
  *   - `start` defaults to the latest tag in the current branch (=`git describe --tags --abbrev=0`)
  *   - `base` defaults to the current branch (=`git branch --show-current`)
@@ -43,7 +43,7 @@ import {
 // A random separator that is unlikely to be in a commit message.
 const separator = "#%$".repeat(35);
 
-/** The option for {@linkcode bumpWorkspaces} */
+/** The option for {@linkcode bumpWorkspace} */
 export type BumpWorkspaceOptions = {
   /** The git tag or commit hash to start from. The default is the latest tag. */
   start?: string;
@@ -69,10 +69,10 @@ export type BumpWorkspaceOptions = {
 };
 
 /**
- * Upgrade the versions of the packages in the workspaces using Conventional Commits rules.
+ * Upgrade the versions of the packages in the workspace using Conventional Commits rules.
  *
  * The workflow of this function is:
- * - Read workspaces info from the deno.json in the given `root`.
+ * - Read workspace info from the deno.json in the given `root`.
  * - Read commit messages between the given `start` and `base`.
  *   - `start` defaults to the latest tag in the current branch (=`git describe --tags --abbrev=0`)
  *   - `base` defaults to the current branch (=`git branch --show-current`)
@@ -82,7 +82,7 @@ export type BumpWorkspaceOptions = {
  * - Create a git commit with given `gitUserName` and `gitUserEmail`.
  * - Create a pull request, targeting the given `base` branch.
  */
-export async function bumpWorkspaces(
+export async function bumpWorkspace(
   {
     parseCommitMessage = defaultParseCommitMessage,
     start,

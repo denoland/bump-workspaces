@@ -233,17 +233,17 @@ export async function getWorkspaceModules(
   root: string,
 ): Promise<[string, WorkspaceModule[]]> {
   const [path, denoConfig] = await tryGetDenoConfig(root);
-  const workspaces = denoConfig.workspaces;
+  const workspaces = denoConfig.workspaces || denoConfig.workspace;
 
   if (!Array.isArray(workspaces)) {
-    console.log(red("Error") + " deno.json doesn't have workspaces field.");
+    console.log(red("Error") + " deno.json doesn't have workspace field.");
     Deno.exit(1);
   }
 
   const result = [];
   for (const workspace of workspaces) {
     if (typeof workspace !== "string") {
-      console.log("deno.json workspaces field should be an array of strings.");
+      console.log("deno.json workspace field should be an array of strings.");
       Deno.exit(1);
     }
     const [path, workspaceConfig] = await tryGetDenoConfig(

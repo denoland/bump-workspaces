@@ -2,7 +2,7 @@
 
 import { assertSnapshot } from "@std/testing/snapshot";
 import { copy, exists } from "@std/fs";
-import { bumpWorkspaces } from "./mod.ts";
+import { bumpWorkspace } from "./mod.ts";
 import { join } from "@std/path";
 import { tryGetDenoConfig } from "./util.ts";
 import { assert, assertEquals } from "@std/assert";
@@ -12,7 +12,7 @@ import { assert, assertEquals } from "@std/assert";
 Deno.test("bumpWorkspaces()", async (t) => {
   const dir = await Deno.makeTempDir();
   await copy("testdata/basic", dir, { overwrite: true });
-  await bumpWorkspaces({
+  await bumpWorkspace({
     dryRun: "git",
     githubRepo: "denoland/deno_std",
     githubToken: "1234567890",
@@ -42,7 +42,7 @@ Deno.test("bumpWorkspaces()", async (t) => {
       "@scope/quux": "jsr:@scope/quux@^0.1.0",
       "@scope/quux/": "jsr:@scope/quux@^0.1.0/",
     },
-    workspaces: ["./foo", "./bar", "./baz", "./qux", "./quux"],
+    workspace: ["./foo", "./bar", "./baz", "./qux", "./quux"],
   });
   [_, config] = await tryGetDenoConfig(join(dir, "foo"));
   assertEquals(config, {
@@ -76,7 +76,7 @@ Deno.test(
   async () => {
     const dir = await Deno.makeTempDir();
     await copy("testdata/basic", dir, { overwrite: true });
-    await bumpWorkspaces({
+    await bumpWorkspace({
       dryRun: true,
       githubRepo: "denoland/deno_std",
       githubToken: "1234567890",
@@ -101,7 +101,7 @@ Deno.test(
         "@scope/quux": "jsr:@scope/quux@^0.0.0",
         "@scope/quux/": "jsr:@scope/quux@^0.0.0/",
       },
-      workspaces: ["./foo", "./bar", "./baz", "./qux", "./quux"],
+      workspace: ["./foo", "./bar", "./baz", "./qux", "./quux"],
     });
   },
 );
