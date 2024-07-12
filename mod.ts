@@ -43,7 +43,7 @@ import {
 // A random separator that is unlikely to be in a commit message.
 const separator = "#%$".repeat(35);
 
-/** The option for {@linkcode bumpWorkspace} */
+/** The option for {@linkcode bumpWorkspaces} */
 export type BumpWorkspaceOptions = {
   /** The git tag or commit hash to start from. The default is the latest tag. */
   start?: string;
@@ -82,7 +82,7 @@ export type BumpWorkspaceOptions = {
  * - Create a git commit with given `gitUserName` and `gitUserEmail`.
  * - Create a pull request, targeting the given `base` branch.
  */
-export async function bumpWorkspace(
+export async function bumpWorkspaces(
   {
     parseCommitMessage = defaultParseCommitMessage,
     start,

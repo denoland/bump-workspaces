@@ -1,7 +1,7 @@
 // Copyright 2024 the Deno authors. All rights reserved. MIT license.
 
 import { parseArgs } from "@std/cli/parse-args";
-import { bumpWorkspace } from "./mod.ts";
+import { bumpWorkspaces } from "./mod.ts";
 
 /**
  * The CLI entrypoint of the package. You can directly perform the version bump behavior from CLI:
@@ -23,5 +23,5 @@ if (import.meta.main) {
   const args = parseArgs(Deno.args, {
     boolean: ["dry-run"],
   });
-  await bumpWorkspace({ dryRun: args["dry-run"] });
+  await bumpWorkspaces({ dryRun: args["dry-run"] });
 }

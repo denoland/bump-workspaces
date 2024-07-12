@@ -2,7 +2,7 @@
 
 import { assertSnapshot } from "@std/testing/snapshot";
 import { copy, exists } from "@std/fs";
-import { bumpWorkspace } from "./mod.ts";
+import { bumpWorkspaces } from "./mod.ts";
 import { join } from "@std/path";
 import { tryGetDenoConfig } from "./util.ts";
 import { assert, assertEquals } from "@std/assert";
@@ -12,7 +12,7 @@ import { assert, assertEquals } from "@std/assert";
 Deno.test("bumpWorkspaces()", async (t) => {
   const dir = await Deno.makeTempDir();
   await copy("testdata/basic", dir, { overwrite: true });
-  await bumpWorkspace({
+  await bumpWorkspaces({
     dryRun: "git",
     githubRepo: "denoland/deno_std",
     githubToken: "1234567890",
@@ -76,7 +76,7 @@ Deno.test(
   async () => {
     const dir = await Deno.makeTempDir();
     await copy("testdata/basic", dir, { overwrite: true });
-    await bumpWorkspace({
+    await bumpWorkspaces({
       dryRun: true,
       githubRepo: "denoland/deno_std",
       githubToken: "1234567890",
