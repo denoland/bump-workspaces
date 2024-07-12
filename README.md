@@ -119,8 +119,8 @@ The tool automatically detects following commit tags:
 - chore
 
 If a module has `BREAKING` commits, then `major` version will be updated. If a
-module has `feat` commits, `minor` version will be updated. Othrewise `patch`
-version will be update.
+module has `feat` commits, `minor` version will be updated. Otherwise `patch`
+version will be updated.
 
 | tag         | version |
 | ----------- | ------- |
