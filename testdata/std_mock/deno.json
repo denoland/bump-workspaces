@@ -33,7 +33,7 @@
     "@std/webgpu": "jsr:@std/webgpu@^0.213.0",
     "@std/webgpu/": "jsr:/@std/webgpu@^0.213.0/"
   },
-  "workspaces": [
+  "workspace": [
     "./fmt",
     "./io",
     "./collections",

@@ -42,7 +42,7 @@ Deno.test("bumpWorkspaces()", async (t) => {
       "@scope/quux": "jsr:@scope/quux@^0.1.0",
       "@scope/quux/": "jsr:@scope/quux@^0.1.0/",
     },
-    workspaces: ["./foo", "./bar", "./baz", "./qux", "./quux"],
+    workspace: ["./foo", "./bar", "./baz", "./qux", "./quux"],
   });
   [_, config] = await tryGetDenoConfig(join(dir, "foo"));
   assertEquals(config, {
@@ -101,7 +101,7 @@ Deno.test(
         "@scope/quux": "jsr:@scope/quux@^0.0.0",
         "@scope/quux/": "jsr:@scope/quux@^0.0.0/",
       },
-      workspaces: ["./foo", "./bar", "./baz", "./qux", "./quux"],
+      workspace: ["./foo", "./bar", "./baz", "./qux", "./quux"],
     });
   },
 );

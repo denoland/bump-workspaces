@@ -11,7 +11,7 @@
     "@scope/quux": "jsr:@scope/quux@^0.0.0",
     "@scope/quux/": "jsr:@scope/quux@^0.0.0/"
   },
-  "workspaces": [
+  "workspace": [
     "./foo",
     "./bar",
     "./baz",
