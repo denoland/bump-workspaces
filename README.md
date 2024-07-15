@@ -6,7 +6,7 @@
 [![codecov](https://codecov.io/gh/denoland/bump-workspaces/graph/badge.svg?token=KUT5Q1PJE6)](https://codecov.io/gh/denoland/bump-workspaces)
 
 This tool detects necessary version upgrades for workspaces packages using
-[Conventional Commiets](https://www.conventionalcommits.org/en/v1.0.0/) and
+[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) and
 creates a PR.
 
 # Try it
