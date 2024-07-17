@@ -250,8 +250,7 @@ export async function getWorkspaceModules(
       join(root, workspace),
     );
     if (!workspaceConfig.name) {
-      console.log(`${path} doesn't have name field.`);
-      Deno.exit(1);
+      continue;
     }
     result.push({ ...workspaceConfig, [pathProp]: path });
   }
