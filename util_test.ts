@@ -18,9 +18,9 @@ import {
   pathProp,
   summarizeVersionBumpsByModule,
   type VersionBump,
+  type WorkspaceModule,
 } from "./util.ts";
 import { tryGetDenoConfig } from "./util.ts";
-import type { WorkspaceModule } from "./util.ts";
 
 const emptyCommit = {
   subject: "",
@@ -30,12 +30,20 @@ const emptyCommit = {
 
 const hash = "0000000000000000000000000000000000000000";
 
-function parse(subject: string) {
-  return defaultParseCommitMessage({ subject, body: "", hash });
+function parse(subject: string, workspaceModules: WorkspaceModule[]) {
+  return defaultParseCommitMessage(
+    { subject, body: "", hash },
+    workspaceModules,
+  );
 }
 
 Deno.test("defaultParseCommitMessage()", () => {
-  assertEquals(parse("feat(foo): add a feature"), [
+  const modules: WorkspaceModule[] = [
+    { name: "foo", version: "0.0.0", [pathProp]: "" },
+    { name: "bar", version: "0.0.0", [pathProp]: "" },
+  ];
+
+  assertEquals(parse("feat(foo): add a feature", modules), [
     {
       module: "foo",
       tag: "feat",
@@ -48,7 +56,7 @@ Deno.test("defaultParseCommitMessage()", () => {
     },
   ]);
 
-  assertEquals(parse("fix(foo,bar): add a feature"), [
+  assertEquals(parse("fix(foo,bar): add a feature", modules), [
     {
       module: "foo",
       tag: "fix",
@@ -71,7 +79,7 @@ Deno.test("defaultParseCommitMessage()", () => {
     },
   ]);
 
-  assertEquals(parse("BREAKING(foo): some breaking change"), [
+  assertEquals(parse("BREAKING(foo): some breaking change", modules), [
     {
       module: "foo",
       tag: "BREAKING",
@@ -84,7 +92,7 @@ Deno.test("defaultParseCommitMessage()", () => {
     },
   ]);
 
-  assertEquals(parse("perf(foo): update"), [
+  assertEquals(parse("perf(foo): update", modules), [
     {
       module: "foo",
       tag: "perf",
@@ -97,7 +105,7 @@ Deno.test("defaultParseCommitMessage()", () => {
     },
   ]);
 
-  assertEquals(parse("docs(foo): update"), [
+  assertEquals(parse("docs(foo): update", modules), [
     {
       module: "foo",
       tag: "docs",
@@ -110,7 +118,7 @@ Deno.test("defaultParseCommitMessage()", () => {
     },
   ]);
 
-  assertEquals(parse("style(foo): update"), [
+  assertEquals(parse("style(foo): update", modules), [
     {
       module: "foo",
       tag: "style",
@@ -123,7 +131,7 @@ Deno.test("defaultParseCommitMessage()", () => {
     },
   ]);
 
-  assertEquals(parse("refactor(foo): update"), [
+  assertEquals(parse("refactor(foo): update", modules), [
     {
       module: "foo",
       tag: "refactor",
@@ -136,7 +144,7 @@ Deno.test("defaultParseCommitMessage()", () => {
     },
   ]);
 
-  assertEquals(parse("test(foo): update"), [
+  assertEquals(parse("test(foo): update", modules), [
     {
       module: "foo",
       tag: "test",
@@ -149,7 +157,7 @@ Deno.test("defaultParseCommitMessage()", () => {
     },
   ]);
 
-  assertEquals(parse("chore(foo): update"), [
+  assertEquals(parse("chore(foo): update", modules), [
     {
       module: "foo",
       tag: "chore",
@@ -162,7 +170,7 @@ Deno.test("defaultParseCommitMessage()", () => {
     },
   ]);
 
-  assertEquals(parse("deprecation(foo): update"), [
+  assertEquals(parse("deprecation(foo): update", modules), [
     {
       module: "foo",
       tag: "deprecation",
@@ -208,7 +216,12 @@ Deno.test("checkModuleName()", () => {
 });
 
 Deno.test("defaultParseCommitMessage() errors with invalid subject", () => {
-  assertEquals(parse("random commit"), {
+  const modules: WorkspaceModule[] = [
+    { name: "foo", version: "0.0.0", [pathProp]: "" },
+    { name: "bar", version: "0.0.0", [pathProp]: "" },
+  ];
+
+  assertEquals(parse("random commit", modules), {
     type: "unknown_commit",
     commit: {
       subject: "random commit",
@@ -217,7 +230,7 @@ Deno.test("defaultParseCommitMessage() errors with invalid subject", () => {
     },
     reason: "The commit message does not match the default pattern.",
   });
-  assertEquals(parse("fix: update"), {
+  assertEquals(parse("fix: update", modules), {
     type: "missing_range",
     commit: {
       subject: "fix: update",
@@ -226,7 +239,7 @@ Deno.test("defaultParseCommitMessage() errors with invalid subject", () => {
     },
     reason: "The commit message does not specify a module.",
   });
-  assertEquals(parse("chore: update"), {
+  assertEquals(parse("chore: update", modules), {
     type: "skipped_commit",
     commit: {
       subject: "chore: update",
@@ -235,7 +248,7 @@ Deno.test("defaultParseCommitMessage() errors with invalid subject", () => {
     },
     reason: "The commit message does not specify a module.",
   });
-  assertEquals(parse("hey(foo): update"), {
+  assertEquals(parse("hey(foo): update", modules), {
     type: "unknown_commit",
     commit: {
       subject: "hey(foo): update",

@@ -105,7 +105,7 @@ const TAG_TO_VERSION: Record<string, "major" | "minor" | "patch"> = {
 
 const TAG_PRIORITY = Object.keys(TAG_TO_VERSION);
 
-export const DEFAULT_RANGE_REQUIED = [
+export const DEFAULT_RANGE_REQUIRED = [
   "BREAKING",
   "feat",
   "fix",
@@ -115,6 +115,7 @@ export const DEFAULT_RANGE_REQUIED = [
 
 export function defaultParseCommitMessage(
   commit: Commit,
+  workspaceModules: WorkspaceModule[],
 ): VersionBump[] | Diagnostic {
   const match = RE_DEFAULT_PATTERN.exec(commit.subject);
   if (match === null) {
@@ -125,9 +126,13 @@ export function defaultParseCommitMessage(
     };
   }
   const [, tag, module, _message] = match;
-  const modules = module ? module.split(/\s*,\s*/) : [];
+  const modules = module === "*"
+    ? workspaceModules.map((x) => x.name)
+    : module
+    ? module.split(/\s*,\s*/)
+    : [];
   if (modules.length === 0) {
-    if (DEFAULT_RANGE_REQUIED.includes(tag)) {
+    if (DEFAULT_RANGE_REQUIRED.includes(tag)) {
       return {
         type: "missing_range",
         commit,
@@ -341,7 +346,7 @@ export async function applyVersionBump(
   if (oldModule.version !== module.version) {
     // The version is manually updated
     console.info(
-      `Manaul version update detected for ${module.name}: ${oldModule.version} -> ${module.version}`,
+      `Manual version update detected for ${module.name}: ${oldModule.version} -> ${module.version}`,
     );
 
     const diff = calcVersionDiff(module.version, oldModule.version);
