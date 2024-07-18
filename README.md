@@ -149,7 +149,8 @@ in README.
 
 ## Wildcard scope
 
-You can use `*` for the scope. That commit affects all the packages in the workspace. For example:
+You can use `*` for the scope. That commit affects all the packages in the
+workspace. For example:
 
 ```
 refactor(*): clean up
