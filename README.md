@@ -147,6 +147,16 @@ in README.
 - perf
 - deprecation
 
+## Wildcard scope
+
+You can use `*` for the scope. That commit affects all the packages in the workspace. For example:
+
+```
+refactor(*): clean up
+```
+
+The above commit causes `patch` upgrade to the all packages.
+
 # License
 
 MIT
