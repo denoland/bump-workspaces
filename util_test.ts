@@ -79,6 +79,29 @@ Deno.test("defaultParseCommitMessage()", () => {
     },
   ]);
 
+  assertEquals(parse("fix(*): a bug", modules), [
+    {
+      module: "foo",
+      tag: "fix",
+      version: "patch",
+      commit: {
+        subject: "fix(*): a bug",
+        body: "",
+        hash,
+      },
+    },
+    {
+      module: "bar",
+      tag: "fix",
+      version: "patch",
+      commit: {
+        subject: "fix(*): a bug",
+        body: "",
+        hash,
+      },
+    },
+  ]);
+
   assertEquals(parse("BREAKING(foo): some breaking change", modules), [
     {
       module: "foo",
