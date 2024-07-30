@@ -88,6 +88,7 @@ export type VersionUpdateResult = {
 };
 
 const RE_DEFAULT_PATTERN = /^([^:()]+)(?:\((.+)\))?: (.*)$/;
+const REGEXP_UNSTABLE_SCOPE = /^(unstable\/(.+)|(.+)\/unstable)$/;
 
 // Defines the version bump for each tag.
 const TAG_TO_VERSION: Record<string, "major" | "minor" | "patch"> = {
@@ -153,7 +154,20 @@ export function defaultParseCommitMessage(
       reason: `Unknown commit tag: ${tag}.`,
     };
   }
-  return modules.map((module) => ({ module, tag, version, commit }));
+  return modules.map((module) => {
+    const matchUnstable = REGEXP_UNSTABLE_SCOPE.exec(module);
+    if (matchUnstable) {
+      // 'scope' is in the form of unstable/foo or foo/unstable
+      // In this case all changes are considered as patch
+      return {
+        module: matchUnstable[2] || matchUnstable[3],
+        tag,
+        commit,
+        version: "patch",
+      };
+    }
+    return ({ module, tag, version, commit });
+  });
 }
 
 export function summarizeVersionBumpsByModule(
