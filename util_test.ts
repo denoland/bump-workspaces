@@ -205,6 +205,35 @@ Deno.test("defaultParseCommitMessage()", () => {
       },
     },
   ]);
+
+  assertEquals(parse("feat(foo/unstable): a new unstable feature", modules), [
+    {
+      module: "foo",
+      tag: "feat",
+      version: "patch",
+      commit: {
+        subject: "feat(foo/unstable): a new unstable feature",
+        body: "",
+        hash,
+      },
+    },
+  ]);
+
+  assertEquals(
+    parse("BREAKING(unstable/foo): break some unstable feature", modules),
+    [
+      {
+        module: "foo",
+        tag: "BREAKING",
+        version: "patch",
+        commit: {
+          subject: "BREAKING(unstable/foo): break some unstable feature",
+          body: "",
+          hash,
+        },
+      },
+    ],
+  );
 });
 
 Deno.test("checkModuleName()", () => {
