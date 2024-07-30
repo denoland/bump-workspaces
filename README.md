@@ -160,14 +160,16 @@ The above commit causes `patch` upgrade to the all packages.
 
 ## Unstable updates
 
-You can mark the change only affects the unstable part of the package by using `scope/unstable` or `unstable/scope`.
+You can mark the change only affects the unstable part of the package by using
+`scope/unstable` or `unstable/scope`.
 
 ```
 feat(crypto/unstable): a new unstable feature
 BREAKING(crypto/unstable): breaking change to unstable feature
 ```
 
-If this notation is used, the effect of the commit becomes `patch` no matter what commit type is used.
+If this notation is used, the effect of the commit becomes `patch` no matter
+what commit type is used.
 
 # License
 
