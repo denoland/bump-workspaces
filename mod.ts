@@ -68,6 +68,8 @@ export type BumpWorkspaceOptions = {
    * Doesn't perform file edits and network operations when true.
    * Perform fs ops, but doesn't perform git operations when "network" */
   dryRun?: boolean | "git";
+  /** The import map path. Default is deno.json(c) at the root. */
+  importMap?: string;
   /** The path to release note markdown file. The dfault is `Releases.md` */
   releaseNotePath?: string;
 };
@@ -96,6 +98,7 @@ export async function bumpWorkspaces(
     githubToken,
     githubRepo,
     dryRun = false,
+    importMap,
     releaseNotePath = "Releases.md",
     root = ".",
   }: BumpWorkspaceOptions = {},
@@ -174,19 +177,26 @@ export async function bumpWorkspaces(
   }
 
   console.log(`Updating the versions:`);
+  let importMapPath: string;
+  if (importMap) {
+    console.log(`Using the import map: ${cyan(importMap)}`);
+    importMapPath = importMap;
+  } else {
+    importMapPath = configPath;
+  }
   const updates: Record<string, VersionUpdateResult> = {};
-  let denoJson = await Deno.readTextFile(configPath);
+  let importMapJson = await Deno.readTextFile(importMapPath);
   for (const summary of summaries) {
     const module = getModule(summary.module, modules)!;
     const oldModule = getModule(summary.module, oldModules);
-    const [denoJson_, versionUpdate] = await applyVersionBump(
+    const [importMapJson_, versionUpdate] = await applyVersionBump(
       summary,
       module,
       oldModule,
-      denoJson,
+      importMapJson,
       dryRun === true,
     );
-    denoJson = denoJson_;
+    importMapJson = importMapJson_;
     updates[module.name] = versionUpdate;
   }
   console.table(updates, ["diff", "from", "to", "path"]);
@@ -208,7 +218,7 @@ export async function bumpWorkspaces(
     console.log(cyan("Skip making a pull request."));
   } else {
     // Updates deno.json
-    await Deno.writeTextFile(configPath, denoJson);
+    await Deno.writeTextFile(importMapPath, importMapJson);
 
     // Prepend release notes
     await ensureFile(releaseNotePath);
