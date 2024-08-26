@@ -16,12 +16,22 @@ import { bumpWorkspaces } from "./mod.ts";
  * deno run -A jsr:@deno/bump-workspaces --dry-run
  * ```
  *
+ * You can specify import map path by `--import-map` option (Default is deno.json(c) at the root):
+ *
+ * ```sh
+ * deno run -A jsr:@deno/bump-workspaces --import-map ./import_map.json
+ * ```
+ *
  * @module
  */
 
 if (import.meta.main) {
   const args = parseArgs(Deno.args, {
+    string: ["import-map"],
     boolean: ["dry-run"],
   });
-  await bumpWorkspaces({ dryRun: args["dry-run"] });
+  await bumpWorkspaces({
+    dryRun: args["dry-run"],
+    importMap: args["import-map"],
+  });
 }
