@@ -177,7 +177,13 @@ export async function bumpWorkspaces(
   }
 
   console.log(`Updating the versions:`);
-  const importMapPath = importMap ? importMap : configPath;
+  let importMapPath: string;
+  if (importMap) {
+    console.log(`Using the import map: ${cyan(importMap)}`);
+    importMapPath = importMap;
+  } else {
+    importMapPath = configPath;
+  }
   const updates: Record<string, VersionUpdateResult> = {};
   let importMapJson = await Deno.readTextFile(importMapPath);
   for (const summary of summaries) {
