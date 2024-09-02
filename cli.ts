@@ -31,7 +31,7 @@ if (import.meta.main) {
     boolean: ["dry-run"],
   });
   await bumpWorkspaces({
-    dryRun: "git",
+    dryRun: args["dry-run"],
     importMap: args["import-map"],
   });
 }
