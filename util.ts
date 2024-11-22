@@ -87,11 +87,12 @@ export type VersionUpdateResult = {
   summary: VersionBumpSummary;
 };
 
-const RE_DEFAULT_PATTERN = /^([^:()]+)(?:\((.+)\))?: (.*)$/;
+const RE_DEFAULT_PATTERN = /^([^:()]+)(?:\((.+)\))?(\!)?: (.*)$/;
 const REGEXP_UNSTABLE_SCOPE = /^(unstable\/(.+)|(.+)\/unstable)$/;
 
+type VersionBumpKind = "major" | "minor" | "patch";
 // Defines the version bump for each tag.
-const TAG_TO_VERSION: Record<string, "major" | "minor" | "patch"> = {
+const TAG_TO_VERSION: Record<string, VersionBumpKind> = {
   BREAKING: "major",
   feat: "minor",
   deprecation: "patch",
@@ -103,7 +104,9 @@ const TAG_TO_VERSION: Record<string, "major" | "minor" | "patch"> = {
   test: "patch",
   chore: "patch",
 };
-
+const POST_MODULE_TO_VERSION: Record<string, VersionBumpKind> = {
+  "!": "major",
+};
 const TAG_PRIORITY = Object.keys(TAG_TO_VERSION);
 
 export const DEFAULT_RANGE_REQUIRED = [
@@ -126,7 +129,7 @@ export function defaultParseCommitMessage(
       reason: "The commit message does not match the default pattern.",
     };
   }
-  const [, tag, module, _message] = match;
+  const [, tag, module, opt_post_module, _message] = match;
   const modules = module === "*"
     ? workspaceModules.map((x) => x.name)
     : module
@@ -146,7 +149,9 @@ export function defaultParseCommitMessage(
       reason: "The commit message does not specify a module.",
     };
   }
-  const version = TAG_TO_VERSION[tag];
+  const version = opt_post_module
+    ? POST_MODULE_TO_VERSION[opt_post_module]
+    : TAG_TO_VERSION[tag];
   if (version === undefined) {
     return {
       type: "unknown_commit",
