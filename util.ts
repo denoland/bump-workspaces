@@ -129,7 +129,7 @@ export function defaultParseCommitMessage(
       reason: "The commit message does not match the default pattern.",
     };
   }
-  const [, tag, module, opt_post_module, _message] = match;
+  const [, tag, module, optionalPostModule, _message] = match;
   const modules = module === "*"
     ? workspaceModules.map((x) => x.name)
     : module
@@ -149,8 +149,8 @@ export function defaultParseCommitMessage(
       reason: "The commit message does not specify a module.",
     };
   }
-  const version = opt_post_module
-    ? POST_MODULE_TO_VERSION[opt_post_module]
+  const version = optionalPostModule in POST_MODULE_TO_VERSION
+    ? POST_MODULE_TO_VERSION[optionalPostModule]
     : TAG_TO_VERSION[tag];
   if (version === undefined) {
     return {
