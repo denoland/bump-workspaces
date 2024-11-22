@@ -269,6 +269,12 @@ snapshot[`summarizeVersionBumpsByModule() 1`] = `
       {
         body: "",
         hash: "0000000000000000000000000000000000000000",
+        subject: "feat(streams)!: remove \`readAll()\`, \`writeAll()\` and \`copy()\` (#4238)",
+        tag: "BREAKING",
+      },
+      {
+        body: "",
+        hash: "0000000000000000000000000000000000000000",
         subject: "docs(streams): remove \`Deno.metrics()\` use in example (#4217)",
         tag: "docs",
       },
@@ -429,6 +435,7 @@ snapshot[`createReleaseNote() 1`] = `
 
 #### @std/streams 0.214.0 (minor) 
 - BREAKING(streams): remove \`readAll()\`, \`writeAll()\` and \`copy()\` (#4238)
+- feat(streams)!: remove \`readAll()\`, \`writeAll()\` and \`copy()\` (#4238)
 - docs(streams): remove \`Deno.metrics()\` use in example (#4217)
 
 #### @std/toml 0.213.1 (patch) 
