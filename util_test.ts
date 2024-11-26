@@ -382,6 +382,17 @@ const exampleVersionBumps = [
     },
   },
   {
+    module: "streams",
+    tag: "BREAKING",
+    version: "major",
+    commit: {
+      subject:
+        "feat(streams)!: remove `readAll()`, `writeAll()` and `copy()` (#4238)",
+      body: "",
+      hash,
+    },
+  },
+  {
     module: "log",
     tag: "BREAKING",
     version: "major",
