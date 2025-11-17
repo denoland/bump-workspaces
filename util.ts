@@ -352,7 +352,10 @@ export async function applyVersionBump(
   if (!oldModule) {
     // The module is newly added
     console.info(`New module ${module.name} detected.`);
-    const diff = calcVersionDiff(module.version, "0.0.0");
+    const diff = module.version === "0.0.0"
+      // If newly added module has 0.0.0 version, let's assume it's a patch bump
+      ? "patch"
+      : calcVersionDiff(module.version, "0.0.0");
     summary.version = diff;
     return [denoJson, {
       from: "0.0.0",
